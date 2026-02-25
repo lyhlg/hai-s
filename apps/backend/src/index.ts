@@ -21,7 +21,7 @@ app.use("/api/stores", storeRouter);
 app.use("/api/stores", tableRouter);
 
 // Phase 2 routes
-app.use("/api/menu", menuRouter); // 개발자 A
+app.use("/api/stores/:storeId/menu", menuRouter); // 개발자 A
 app.use("/api/orders", orderRouter); // 개발자 B
 app.use("/api/sse", sseRouter); // 개발자 B
 
