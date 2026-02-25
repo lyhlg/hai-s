@@ -10,9 +10,9 @@
 
 ### Step 1: 프로젝트 구조
 - [x] 디렉토리 구조 생성 (`components/`, `pages/`, `hooks/`, `contexts/`, `api/`, `mocks/`)
-- [ ] 공통 CSS 변수 / 글로벌 스타일 — ⏸️ shadcn/ui 도입 후 진행
-- [ ] Layout 컴포넌트 (Header + Sidebar + Content) — ⏸️ shadcn/ui 도입 후 진행
-- [ ] 공통 컴포넌트: Button, Input, Modal, LoadingSpinner — ⏸️ shadcn/ui 도입 후 진행
+- [x] shadcn/ui + Tailwind CSS v4 설정
+- [x] Layout 컴포넌트 (Sidebar 네비게이션 + 로그아웃)
+- [x] 공통 컴포넌트: shadcn/ui (Button, Input, Label, Card, Table, Dialog, Alert, Badge, Separator, Sonner, Spinner)
 
 ### Step 2: API Client + Mock
 - [x] axios 인스턴스 (baseURL, JWT 인터셉터)
@@ -50,11 +50,11 @@
 - [ ] mock API로 테이블 CRUD 동작 확인 (브라우저)
 - [ ] 브라우저 새로고침 시 세션 유지 확인
 
-### Step 8: UI 교체 (⏸️ 대기)
-- [ ] shadcn/ui 설치 + 설정
-- [ ] 로그인 페이지 UI 교체
-- [ ] 테이블 관리 페이지 UI 교체
-- [ ] Layout (Sidebar + Header) 구현
+### Step 8: UI (shadcn/ui)
+- [x] shadcn/ui 설치 + Tailwind CSS v4 설정
+- [x] 로그인 페이지 UI (Card, Input, Alert)
+- [x] 테이블 관리 페이지 UI (Table, Dialog, Badge, toast)
+- [x] AppLayout (Sidebar + 로그아웃)
 
 ---
 
