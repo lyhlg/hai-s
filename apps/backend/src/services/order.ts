@@ -58,8 +58,12 @@ export class OrderService {
     return order;
   }
 
-  async getOrders(sessionId: string) {
-    return this.orderRepo.getBySession(sessionId);
+  async getOrders(sessionId: string, requestStoreId?: number | string) {
+    const orders = await this.orderRepo.getBySession(sessionId);
+    if (requestStoreId && orders.length > 0 && String(orders[0].store_id) !== String(requestStoreId)) {
+      throw new NotFoundError("주문을 찾을 수 없습니다");
+    }
+    return orders;
   }
 
   private static STATUS_FLOW: Record<string, string[]> = {
@@ -69,9 +73,12 @@ export class OrderService {
     ready: ["served", "cancelled"],
   };
 
-  async updateStatus(orderId: string, status: string) {
+  async updateStatus(orderId: string, status: string, requestStoreId?: number | string) {
     const order = await this.orderRepo.getById(orderId);
     if (!order) throw new NotFoundError("주문을 찾을 수 없습니다");
+    if (requestStoreId && String(order.store_id) !== String(requestStoreId)) {
+      throw new NotFoundError("주문을 찾을 수 없습니다");
+    }
 
     const allowed = OrderService.STATUS_FLOW[order.status];
     if (!allowed || !allowed.includes(status)) {
@@ -88,9 +95,12 @@ export class OrderService {
     });
   }
 
-  async deleteOrder(orderId: string) {
+  async deleteOrder(orderId: string, requestStoreId?: number | string) {
     const order = await this.orderRepo.getById(orderId);
     if (!order) throw new NotFoundError("주문을 찾을 수 없습니다");
+    if (requestStoreId && String(order.store_id) !== String(requestStoreId)) {
+      throw new NotFoundError("주문을 찾을 수 없습니다");
+    }
 
     await this.orderRepo.deleteOrder(orderId);
     this.sse.broadcast(order.store_id, "order:deleted", { order_id: orderId });

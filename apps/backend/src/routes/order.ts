@@ -41,7 +41,7 @@ router.get("/", auth, authorize("admin", "table"), async (req, res, next) => {
   try {
     const sessionId = req.query.sessionId as string;
     if (!sessionId) throw new BadRequestError("sessionId는 필수입니다");
-    const orders = await orderService.getOrders(sessionId);
+    const orders = await orderService.getOrders(sessionId, req.user!.storeId);
     res.json(orders);
   } catch (err) { next(err); }
 });
@@ -49,7 +49,7 @@ router.get("/", auth, authorize("admin", "table"), async (req, res, next) => {
 // PUT /api/orders/:orderId/status - 상태 변경 (Admin only)
 router.put("/:orderId/status", auth, authorize("admin"), validate(updateOrderStatusSchema), async (req, res, next) => {
   try {
-    await orderService.updateStatus(req.params.orderId as string, req.body.status);
+    await orderService.updateStatus(req.params.orderId as string, req.body.status, req.user!.storeId);
     res.json({ success: true });
   } catch (err) { next(err); }
 });
@@ -57,7 +57,7 @@ router.put("/:orderId/status", auth, authorize("admin"), validate(updateOrderSta
 // DELETE /api/orders/:orderId - 주문 삭제 (Admin only)
 router.delete("/:orderId", auth, authorize("admin"), async (req, res, next) => {
   try {
-    await orderService.deleteOrder(req.params.orderId as string);
+    await orderService.deleteOrder(req.params.orderId as string, req.user!.storeId);
     res.json({ success: true });
   } catch (err) { next(err); }
 });

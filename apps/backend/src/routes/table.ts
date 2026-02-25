@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { pool } from "../db.js";
 import { config } from "../config/index.js";
-import { authenticate, authorize } from "../middleware/auth.js";
+import { authenticate, authorize, verifyStoreAccess } from "../middleware/auth.js";
 import { validate } from "../middleware/validate.js";
 import { createTableSchema } from "../schemas/table.js";
 import { TableService } from "../services/table.js";
@@ -32,7 +32,7 @@ function toResponse(t: Table) {
   };
 }
 
-tableRouter.post("/:storeId/tables", auth, authorize("admin"), validate(createTableSchema), async (req, res, next) => {
+tableRouter.post("/:storeId/tables", auth, authorize("admin"), verifyStoreAccess, validate(createTableSchema), async (req, res, next) => {
   try {
     const storeId = Number(req.params.storeId);
     const table = await tableService.createTable(storeId, req.body.tableNumber, req.body.password, req.body.capacity);
@@ -42,7 +42,7 @@ tableRouter.post("/:storeId/tables", auth, authorize("admin"), validate(createTa
   }
 });
 
-tableRouter.get("/:storeId/tables", auth, authorize("admin"), async (req, res, next) => {
+tableRouter.get("/:storeId/tables", auth, authorize("admin"), verifyStoreAccess, async (req, res, next) => {
   try {
     const storeId = Number(req.params.storeId);
     const tables = await tableService.getTables(storeId);
@@ -52,7 +52,7 @@ tableRouter.get("/:storeId/tables", auth, authorize("admin"), async (req, res, n
   }
 });
 
-tableRouter.get("/:storeId/tables/:tableId", auth, authorize("admin", "table"), async (req, res, next) => {
+tableRouter.get("/:storeId/tables/:tableId", auth, authorize("admin", "table"), verifyStoreAccess, async (req, res, next) => {
   try {
     const storeId = Number(req.params.storeId);
     const tableId = Number(req.params.tableId);
@@ -63,7 +63,7 @@ tableRouter.get("/:storeId/tables/:tableId", auth, authorize("admin", "table"), 
   }
 });
 
-tableRouter.post("/:storeId/tables/:tableId/start-session", auth, authorize("table"), async (req, res, next) => {
+tableRouter.post("/:storeId/tables/:tableId/start-session", auth, authorize("table"), verifyStoreAccess, async (req, res, next) => {
   try {
     const storeId = Number(req.params.storeId);
     const tableId = Number(req.params.tableId);
@@ -74,7 +74,7 @@ tableRouter.post("/:storeId/tables/:tableId/start-session", auth, authorize("tab
   }
 });
 
-tableRouter.post("/:storeId/tables/:tableId/end-session", auth, authorize("admin"), async (req, res, next) => {
+tableRouter.post("/:storeId/tables/:tableId/end-session", auth, authorize("admin"), verifyStoreAccess, async (req, res, next) => {
   try {
     const storeId = Number(req.params.storeId);
     const tableId = Number(req.params.tableId);
@@ -85,7 +85,7 @@ tableRouter.post("/:storeId/tables/:tableId/end-session", auth, authorize("admin
   }
 });
 
-tableRouter.get("/:storeId/tables/:tableId/session", auth, authorize("admin", "table"), async (req, res, next) => {
+tableRouter.get("/:storeId/tables/:tableId/session", auth, authorize("admin", "table"), verifyStoreAccess, async (req, res, next) => {
   try {
     const storeId = Number(req.params.storeId);
     const tableId = Number(req.params.tableId);
@@ -97,7 +97,7 @@ tableRouter.get("/:storeId/tables/:tableId/session", auth, authorize("admin", "t
 });
 
 // GET /:storeId/tables/:tableId/order-history - 과거 주문 내역 (Admin only)
-tableRouter.get("/:storeId/tables/:tableId/order-history", auth, authorize("admin"), async (req, res, next) => {
+tableRouter.get("/:storeId/tables/:tableId/order-history", auth, authorize("admin"), verifyStoreAccess, async (req, res, next) => {
   try {
     const { storeId, tableId } = req.params as Record<string, string>;
     const date = req.query.date as string | undefined;
