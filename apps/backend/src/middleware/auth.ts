@@ -46,3 +46,12 @@ export function authorize(...roles: UserRole[]) {
     next();
   };
 }
+
+export function verifyStoreAccess(req: Request, res: Response, next: NextFunction) {
+  const paramStoreId = Number(req.params.storeId);
+  if (paramStoreId && req.user && paramStoreId !== req.user.storeId) {
+    res.status(403).json({ error: "FORBIDDEN", message: "해당 매장에 대한 접근 권한이 없습니다" });
+    return;
+  }
+  next();
+}

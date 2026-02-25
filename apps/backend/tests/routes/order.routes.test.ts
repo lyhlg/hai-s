@@ -126,7 +126,7 @@ describe("Order Routes", () => {
         .send({ status: "confirmed" });
 
       expect(res.status).toBe(200);
-      expect(mockUpdateStatus).toHaveBeenCalledWith("o1", "confirmed");
+      expect(mockUpdateStatus).toHaveBeenCalledWith("o1", "confirmed", "store-001");
     });
 
     it("returns 403 with table role", async () => {
@@ -174,7 +174,7 @@ describe("Order Routes", () => {
         .set("Authorization", `Bearer ${adminToken}`);
 
       expect(res.status).toBe(200);
-      expect(mockDeleteOrder).toHaveBeenCalledWith("o1");
+      expect(mockDeleteOrder).toHaveBeenCalledWith("o1", "store-001");
     });
 
     it("returns 403 with table role", async () => {
