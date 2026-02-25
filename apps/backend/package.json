@@ -9,7 +9,10 @@
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "db:migrate": "cat migrations/*.sql | docker exec -i hai-s-mysql mysql -uroot -proot1234 hai_s",
+    "db:seed": "docker exec -i hai-s-mysql mysql -uroot -proot1234 hai_s < seeds/001_initial_data.sql",
+    "db:reset": "docker exec -i hai-s-mysql mysql -uroot -proot1234 -e 'DROP DATABASE hai_s; CREATE DATABASE hai_s;' && npm run db:migrate && npm run db:seed"
   },
   "dependencies": {
     "@hai-s/shared": "workspace:*",
