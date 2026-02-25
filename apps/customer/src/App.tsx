@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 import { useAuth } from "./hooks/useAuth";
+import { Spinner } from "@hai-s/dd";
 import LoginPage from "./pages/LoginPage";
 import MenuPage from "./pages/MenuPage";
 import CartPage from "./pages/CartPage";
@@ -14,9 +15,17 @@ function Nav() {
     { path: "/orders", label: "주문내역" },
   ];
   return (
-    <nav style={{ display: "flex", borderBottom: "1px solid #eee" }}>
+    <nav className="flex border-b border-gray-200 bg-white sticky top-0 z-10">
       {tabs.map((t) => (
-        <Link key={t.path} to={t.path} style={{ flex: 1, textAlign: "center", padding: 12, textDecoration: "none", color: location.pathname === t.path ? "#1976d2" : "#666", fontWeight: location.pathname === t.path ? "bold" : "normal", borderBottom: location.pathname === t.path ? "2px solid #1976d2" : "none" }}>
+        <Link
+          key={t.path}
+          to={t.path}
+          className={`flex-1 text-center py-3 text-sm font-medium transition-colors ${
+            location.pathname === t.path
+              ? "text-primary-600 border-b-2 border-primary-600"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
           {t.label}
         </Link>
       ))}
@@ -25,11 +34,22 @@ function Nav() {
 }
 
 function App() {
-  const { isLoggedIn, storeId } = useAuth();
-  const sessionId = localStorage.getItem("sessionId");
+  const { status, storeId, sessionId } = useAuth();
 
-  if (!isLoggedIn) {
-    return <BrowserRouter><LoginPage /></BrowserRouter>;
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Spinner size="xl" />
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return (
+      <BrowserRouter>
+        <LoginPage />
+      </BrowserRouter>
+    );
   }
 
   return (

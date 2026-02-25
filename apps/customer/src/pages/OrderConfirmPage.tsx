@@ -10,11 +10,20 @@ export default function OrderConfirmPage() {
   const [error, setError] = useState("");
   const [orderId, setOrderId] = useState<string | null>(null);
 
+  const storeId = Number(localStorage.getItem("storeId")) || 0;
+  const tableId = Number(localStorage.getItem("tableId")) || 0;
+  const sessionId = Number(localStorage.getItem("sessionId")) || 0;
+
   const handleConfirm = async () => {
     setSubmitting(true);
     setError("");
     try {
-      const order = await api.createOrder(items.map((i) => ({ menuItemId: i.menuItemId, quantity: i.quantity })));
+      const order = await api.createOrder(
+        storeId,
+        tableId,
+        sessionId,
+        items.map((i) => ({ menuId: Number(i.menuItemId), quantity: i.quantity, unitPrice: i.price }))
+      );
       setOrderId(order.id);
       clearCart();
       setTimeout(() => navigate("/"), 5000);
@@ -30,7 +39,7 @@ export default function OrderConfirmPage() {
       <div style={{ padding: 24, textAlign: "center" }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
         <h2>주문 완료!</h2>
-        <p style={{ fontSize: 14, color: "#666", marginTop: 8 }}>주문번호: {orderId.slice(0, 8)}</p>
+        <p style={{ fontSize: 14, color: "#666", marginTop: 8 }}>주문번호: {String(orderId).slice(0, 8)}</p>
         <p style={{ color: "#999", marginTop: 16 }}>5초 후 메뉴 화면으로 이동합니다</p>
       </div>
     );

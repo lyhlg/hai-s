@@ -13,7 +13,7 @@ interface MenuItem {
   is_popular: boolean;
 }
 
-export default function MenuPage({ storeId }: { storeId: string }) {
+export default function MenuPage({ storeId }: { storeId: number }) {
   const [items, setItems] = useState<MenuItem[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [error, setError] = useState("");
@@ -30,7 +30,6 @@ export default function MenuPage({ storeId }: { storeId: string }) {
     <div style={{ paddingBottom: 80 }}>
       {error && <p style={{ color: "red", padding: 16 }}>{error}</p>}
 
-      {/* 카테고리 탭 */}
       <div style={{ display: "flex", gap: 8, padding: 12, overflowX: "auto", borderBottom: "1px solid #eee" }}>
         <button onClick={() => setSelectedCategory("")} style={{ padding: "8px 16px", borderRadius: 20, border: !selectedCategory ? "2px solid #1976d2" : "1px solid #ccc", background: !selectedCategory ? "#e3f2fd" : "#fff", whiteSpace: "nowrap" }}>
           전체
@@ -42,7 +41,6 @@ export default function MenuPage({ storeId }: { storeId: string }) {
         ))}
       </div>
 
-      {/* 메뉴 카드 */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 12, padding: 12 }}>
         {filtered.map((item) => (
           <div key={item.id} style={{ border: "1px solid #eee", borderRadius: 12, padding: 12, opacity: item.is_available ? 1 : 0.5 }}>
@@ -70,7 +68,6 @@ export default function MenuPage({ storeId }: { storeId: string }) {
         ))}
       </div>
 
-      {/* 하단 장바구니 바 */}
       {totalCount > 0 && (
         <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#1976d2", color: "#fff", padding: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontSize: 16 }}>장바구니 {totalCount}개</span>

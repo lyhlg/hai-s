@@ -127,9 +127,15 @@ importers:
 
   apps/customer:
     dependencies:
+      '@hai-s/dd':
+        specifier: workspace:^
+        version: link:../../packages/dd
       '@hai-s/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@tailwindcss/vite':
+        specifier: ^4.2.1
+        version: 4.2.1(vite@5.4.21(@types/node@25.3.0)(lightningcss@1.31.1))
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -139,7 +145,13 @@ importers:
       react-router-dom:
         specifier: ^6.22.0
         version: 6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      tailwindcss:
+        specifier: ^4.2.1
+        version: 4.2.1
     devDependencies:
+      '@types/node':
+        specifier: ^25.3.0
+        version: 25.3.0
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.28
