@@ -32,7 +32,7 @@ export function authenticate(secret: string) {
 export function authorize(...roles: UserRole[]) {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user || !roles.includes(req.user.role)) {
-      res.status(401).json({ error: "UNAUTHORIZED", message: "권한이 없습니다" });
+      res.status(403).json({ error: "FORBIDDEN", message: "권한이 없습니다" });
       return;
     }
     next();

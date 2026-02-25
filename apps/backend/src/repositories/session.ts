@@ -16,18 +16,18 @@ export class SessionRepository {
   }
 
   async create(storeId: string, tableId: string): Promise<TableSession> {
-    const id = parseInt(uuid().replace(/-/g, '').substring(0, 15), 16);
+    const id = uuid();
     const now = new Date();
     await this.pool.execute(
-      "INSERT INTO table_sessions (id, table_id, customer_token, started_at, is_active) VALUES (?, ?, ?, ?, ?)",
-      [id, tableId, uuid(), now, true],
+      "INSERT INTO table_sessions (id, store_id, table_id, started_at, is_active) VALUES (?, ?, ?, ?, ?)",
+      [id, storeId, tableId, now, true],
     );
     return { 
       id, 
-      table_id: parseInt(tableId), 
-      customer_token: uuid(),
+      store_id: storeId, 
+      table_id: tableId, 
       started_at: now, 
-      ended_at: null, 
+      completed_at: null, 
       is_active: true 
     };
   }
@@ -44,11 +44,11 @@ export class SessionRepository {
   private toSession(r: any): TableSession {
     return {
       id: r.id,
+      store_id: r.store_id,
       table_id: r.table_id,
-      customer_token: r.customer_token,
       started_at: r.started_at,
-      ended_at: r.ended_at,
-      is_active: r.is_active
+      completed_at: r.completed_at,
+      is_active: !!r.is_active
     };
   }
 }

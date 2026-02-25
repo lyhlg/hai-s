@@ -15,7 +15,7 @@ describe("SessionRepository", () => {
     const row = { id: "ses-1", store_id: "s1", table_id: "t1", started_at: new Date(), completed_at: null, is_active: 1 };
     mockPool.execute.mockResolvedValue([[row]]);
     const result = await repo.findActive("s1", "t1");
-    expect(result).toMatchObject({ id: "ses-1", isActive: true });
+    expect(result).toMatchObject({ id: "ses-1", store_id: "s1", table_id: "t1", is_active: true });
   });
 
   it("findActive returns null when no active session", async () => {
@@ -27,9 +27,10 @@ describe("SessionRepository", () => {
   it("create inserts and returns session", async () => {
     mockPool.execute.mockResolvedValue([{}]);
     const result = await repo.create("s1", "t1");
-    expect(result.storeId).toBe("s1");
-    expect(result.tableId).toBe("t1");
-    expect(result.isActive).toBe(true);
+    expect(result.store_id).toBe("s1");
+    expect(result.table_id).toBe("t1");
+    expect(result.is_active).toBe(true);
+    expect(result.completed_at).toBeNull();
   });
 
   it("endSession updates and returns completedAt", async () => {
