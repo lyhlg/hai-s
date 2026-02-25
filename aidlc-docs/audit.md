@@ -117,3 +117,51 @@ AI-DLC 워크플로우를 시작해봅시다."
 **Context**: Unit 1 완료, Unit 2 시작
 
 ---
+
+## Unit 3: Order + SSE Backend - Code Generation
+**Timestamp**: 2026-02-25T15:39:57+09:00
+**User Input**: "T6: Order + SSE 백엔드 (Unit 3 BE) 를 개발 진행해줘"
+**AI Response**: TDD 접근 방식 선택 질문 제시
+**Context**: Construction Phase - Unit 3 Code Generation 시작
+
+---
+
+## Unit 3: TDD Selection
+**Timestamp**: 2026-02-25T15:39:57+09:00
+**User Input**: "A"
+**AI Response**: TDD 방식 선택 확인, Code Generation Plan 작성 및 제시
+**Context**: TDD (Test-Driven Development) 선택
+
+---
+
+## Unit 3: Plan Approval
+**Timestamp**: 2026-02-25T15:39:57+09:00
+**User Input**: "A"
+**AI Response**: Plan 승인, 코드 생성 실행 시작
+**Context**: TDD Code Generation Plan 승인
+
+---
+
+## Unit 3: Code Generation Complete
+**Timestamp**: 2026-02-25T15:44:00+09:00
+**AI Response**: Unit 3 Order + SSE 백엔드 TDD 코드 생성 완료
+**Context**: 전체 107개 테스트 통과 (17 파일)
+
+### 생성된 파일:
+- packages/shared/src/types/order.ts (수정 - UUID 타입 통일)
+- packages/shared/src/types/sse.ts (수정 - OrderCancelledEvent 추가)
+- apps/backend/migrations/002_orders.sql
+- apps/backend/src/schemas/order.ts
+- apps/backend/src/repositories/order.ts
+- apps/backend/src/repositories/menu.ts
+- apps/backend/src/services/order.ts
+- apps/backend/src/services/sse-manager.ts
+- apps/backend/src/routes/order.ts (기존 TODO 교체)
+- apps/backend/src/routes/sse.ts (기존 TODO 교체)
+- apps/backend/tests/repositories/order.repository.test.ts
+- apps/backend/tests/services/order.service.test.ts
+- apps/backend/tests/services/sse-manager.test.ts
+- apps/backend/tests/routes/order.routes.test.ts
+- apps/backend/tests/routes/sse.routes.test.ts
+
+---

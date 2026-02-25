@@ -1,16 +1,17 @@
 // SSE types
 export type SSEEventType = 'order:created' | 'order:updated' | 'order:cancelled' | 'session:ended';
 
-export interface SSEEvent {
+export interface SSEEvent<T = unknown> {
   type: SSEEventType;
-  data: any;
-  timestamp: Date;
+  data: T;
+  timestamp: string;
 }
 
 export interface OrderCreatedEvent {
-  order_id: number;
-  session_id: number;
-  table_number: string;
+  order_id: string;
+  session_id: string;
+  table_id: string;
+  table_number: number;
   items: Array<{
     menu_item_name: string;
     quantity: number;
@@ -19,7 +20,11 @@ export interface OrderCreatedEvent {
 }
 
 export interface OrderUpdatedEvent {
-  order_id: number;
+  order_id: string;
   status: string;
-  updated_at: Date;
+  updated_at: string;
+}
+
+export interface OrderCancelledEvent {
+  order_id: string;
 }
