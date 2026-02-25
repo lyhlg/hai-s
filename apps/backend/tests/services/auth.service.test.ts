@@ -1,0 +1,89 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { AuthService } from "../../src/services/auth.js";
+
+const mockStoreRepo = { validate: vi.fn() };
+const mockAdminUserRepo = { findByStoreAndUsername: vi.fn() };
+const mockTableRepo = { findByStoreAndNumber: vi.fn() };
+const mockLoginAttemptRepo = { countRecentFailures: vi.fn(), record: vi.fn() };
+
+describe("AuthService", () => {
+  let service: AuthService;
+
+  beforeEach(() => {
+    service = new AuthService(
+      mockStoreRepo as any,
+      mockAdminUserRepo as any,
+      mockTableRepo as any,
+      mockLoginAttemptRepo as any,
+      "test-secret",
+    );
+    vi.clearAllMocks();
+  });
+
+  describe("loginAdmin", () => {
+    it("returns token on valid credentials", async () => {
+      mockStoreRepo.validate.mockResolvedValue(true);
+      mockLoginAttemptRepo.countRecentFailures.mockResolvedValue(0);
+      // bcrypt hash of "admin123"
+      const { hashPassword } = await import("../../src/utils/password.js");
+      const hash = await hashPassword("admin123");
+      mockAdminUserRepo.findByStoreAndUsername.mockResolvedValue({
+        id: "admin-001", storeId: "store-001", username: "admin", passwordHash: hash,
+      });
+
+      const result = await service.loginAdmin("store-001", "admin", "admin123");
+      expect(result.token).toBeDefined();
+      expect(result.expiresAt).toBeDefined();
+      expect(mockLoginAttemptRepo.record).toHaveBeenCalledWith("store:store-001:admin:admin", true);
+    });
+
+    it("throws NotFoundError when store does not exist", async () => {
+      mockStoreRepo.validate.mockResolvedValue(false);
+      await expect(service.loginAdmin("bad", "admin", "pass")).rejects.toThrow("매장을 찾을 수 없습니다");
+    });
+
+    it("throws TooManyAttemptsError when login attempts exceeded", async () => {
+      mockStoreRepo.validate.mockResolvedValue(true);
+      mockLoginAttemptRepo.countRecentFailures.mockResolvedValue(5);
+      await expect(service.loginAdmin("store-001", "admin", "pass")).rejects.toThrow("로그인 시도 횟수를 초과했습니다");
+    });
+
+    it("throws UnauthorizedError on wrong password", async () => {
+      mockStoreRepo.validate.mockResolvedValue(true);
+      mockLoginAttemptRepo.countRecentFailures.mockResolvedValue(0);
+      const { hashPassword } = await import("../../src/utils/password.js");
+      const hash = await hashPassword("correct");
+      mockAdminUserRepo.findByStoreAndUsername.mockResolvedValue({
+        id: "admin-001", storeId: "store-001", username: "admin", passwordHash: hash,
+      });
+
+      await expect(service.loginAdmin("store-001", "admin", "wrong")).rejects.toThrow("매장 ID, 사용자명 또는 비밀번호가 올바르지 않습니다");
+      expect(mockLoginAttemptRepo.record).toHaveBeenCalledWith("store:store-001:admin:admin", false);
+    });
+  });
+
+  describe("loginTable", () => {
+    it("returns token on valid credentials", async () => {
+      mockStoreRepo.validate.mockResolvedValue(true);
+      mockLoginAttemptRepo.countRecentFailures.mockResolvedValue(0);
+      const { hashPassword } = await import("../../src/utils/password.js");
+      const hash = await hashPassword("table123");
+      mockTableRepo.findByStoreAndNumber.mockResolvedValue({
+        id: "table-001", storeId: "store-001", tableNumber: 1, passwordHash: hash,
+      });
+
+      const result = await service.loginTable("store-001", 1, "table123");
+      expect(result.token).toBeDefined();
+      expect(result.storeId).toBe("store-001");
+      expect(result.tableId).toBe("table-001");
+      expect(result.tableNumber).toBe(1);
+    });
+
+    it("throws UnauthorizedError when table not found", async () => {
+      mockStoreRepo.validate.mockResolvedValue(true);
+      mockLoginAttemptRepo.countRecentFailures.mockResolvedValue(0);
+      mockTableRepo.findByStoreAndNumber.mockResolvedValue(null);
+      await expect(service.loginTable("store-001", 99, "pass")).rejects.toThrow("매장 ID, 테이블 번호 또는 비밀번호가 올바르지 않습니다");
+    });
+  });
+});
