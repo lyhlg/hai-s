@@ -19,16 +19,22 @@
 ### 🟢 CONSTRUCTION PHASE
 - [x] Functional Design (Unit 1: Core) - COMPLETED
 - [x] NFR Requirements (Unit 1: Core) - COMPLETED
-- [ ] NFR Design (Unit 1: Core) - IN PROGRESS
+- [x] NFR Design (Unit 1: Core) - COMPLETED
 - [ ] Infrastructure Design - SKIP
-- [ ] Code Generation - EXECUTE
+- [x] Code Generation (Unit 1: Core) - COMPLETED
 - [ ] Build and Test - EXECUTE
+
+### Unit 2: Menu
+- [ ] Functional Design - IN PROGRESS
+- [ ] NFR Requirements
+- [ ] NFR Design
+- [ ] Code Generation
 
 ### 🟡 OPERATIONS PHASE
 - [ ] Operations - PLACEHOLDER
 
 ## Current Status
 - **Lifecycle Phase**: CONSTRUCTION
-- **Current Stage**: NFR Design (Unit 1: Core)
-- **Next Stage**: Code Generation (Unit 1: Core)
+- **Current Stage**: Functional Design (Unit 2: Menu)
+- **Next Stage**: NFR Requirements (Unit 2: Menu)
 - **Status**: In Progress

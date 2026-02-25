@@ -78,3 +78,42 @@ AI-DLC 워크플로우를 시작해봅시다."
 **Context**: NFR Requirements 승인, NFR Design 시작
 
 ---
+
+## CONSTRUCTION - NFR Design (Unit 1: Core) - 승인
+**Timestamp**: 2026-02-25T14:09:51+09:00
+**User Input**: "진행"
+**AI Response**: NFR Design 승인 완료. Code Generation 단계로 진행.
+**Context**: NFR Design 승인, Code Generation 시작
+
+---
+
+## CONSTRUCTION - Code Generation (Unit 1: Core) - TDD 선택
+**Timestamp**: 2026-02-25T14:11:22+09:00
+**User Input**: "A"
+**AI Response**: TDD 방식 선택 확인. Code Generation Plan 작성 시작.
+**Context**: Code Generation TDD 모드, Plan 작성 중
+
+---
+
+## CONSTRUCTION - Code Generation (Unit 1: Core) - Plan 승인
+**Timestamp**: 2026-02-25T14:14:41+09:00
+**User Input**: "B"
+**AI Response**: TDD Code Generation Plan 승인. 코드 생성 시작.
+**Context**: Code Generation Plan 승인, Step 0부터 실행
+
+---
+
+## CONSTRUCTION - Code Generation (Unit 1: Core) - 완료
+**Timestamp**: 2026-02-25T14:22:00+09:00
+**AI Response**: Unit 1: Core TDD Code Generation 완료. 10개 테스트 파일, 41개 테스트 전부 통과. TypeScript 린트 통과.
+**Context**: Code Generation 완료, 사용자 승인 대기
+
+---
+
+## CONSTRUCTION - Code Generation (Unit 1: Core) - 승인
+**Timestamp**: 2026-02-25T14:23:57+09:00
+**User Input**: "B"
+**AI Response**: Unit 1 Code Generation 승인. Unit 2: Menu Functional Design으로 진행.
+**Context**: Unit 1 완료, Unit 2 시작
+
+---
