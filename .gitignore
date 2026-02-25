@@ -176,7 +176,7 @@ project.fragment.lock.json
 artifacts/
 *.nuget.props
 *.nuget.targets
-packages/
+# packages/  # disabled - conflicts with pnpm workspace
 
 # ============================================
 # Go
