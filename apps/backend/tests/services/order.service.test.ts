@@ -111,6 +111,30 @@ describe("OrderService", () => {
       mockOrderRepo.getById.mockResolvedValue(null);
       await expect(service.updateStatus("bad", "confirmed")).rejects.toThrow("주문을 찾을 수 없습니다");
     });
+
+    it("throws on invalid status transition (pending → served)", async () => {
+      mockOrderRepo.getById.mockResolvedValue({ id: "o1", store_id: "s1", status: "pending" });
+      await expect(service.updateStatus("o1", "served")).rejects.toThrow("변경할 수 없습니다");
+    });
+
+    it("throws on invalid status transition (ready → preparing)", async () => {
+      mockOrderRepo.getById.mockResolvedValue({ id: "o1", store_id: "s1", status: "ready" });
+      await expect(service.updateStatus("o1", "preparing")).rejects.toThrow("변경할 수 없습니다");
+    });
+
+    it("allows cancellation from pending", async () => {
+      mockOrderRepo.getById.mockResolvedValue({ id: "o1", store_id: "s1", status: "pending" });
+      mockOrderRepo.updateStatus.mockResolvedValue(undefined);
+
+      await service.updateStatus("o1", "cancelled");
+
+      expect(mockSSE.broadcast).toHaveBeenCalledWith("s1", "order:cancelled", expect.objectContaining({ order_id: "o1" }));
+    });
+
+    it("rejects transition from served", async () => {
+      mockOrderRepo.getById.mockResolvedValue({ id: "o1", store_id: "s1", status: "served" });
+      await expect(service.updateStatus("o1", "cancelled")).rejects.toThrow("변경할 수 없습니다");
+    });
   });
 
   describe("deleteOrder", () => {

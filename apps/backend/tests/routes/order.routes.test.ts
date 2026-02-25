@@ -144,6 +144,25 @@ describe("Order Routes", () => {
         .send({ status: "invalid" });
       expect(res.status).toBe(400);
     });
+
+    it("accepts cancelled status", async () => {
+      mockUpdateStatus.mockResolvedValue(undefined);
+      const res = await supertest(app)
+        .put("/api/orders/o1/status")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ status: "cancelled" });
+      expect(res.status).toBe(200);
+    });
+
+    it("returns 400 on invalid status transition", async () => {
+      const { BadRequestError } = await import("../../src/errors/index.js");
+      mockUpdateStatus.mockRejectedValue(new BadRequestError("변경할 수 없습니다"));
+      const res = await supertest(app)
+        .put("/api/orders/o1/status")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ status: "served" });
+      expect(res.status).toBe(400);
+    });
   });
 
   describe("DELETE /api/orders/:orderId", () => {

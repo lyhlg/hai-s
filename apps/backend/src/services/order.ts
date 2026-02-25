@@ -62,12 +62,26 @@ export class OrderService {
     return this.orderRepo.getBySession(sessionId);
   }
 
+  private static STATUS_FLOW: Record<string, string[]> = {
+    pending: ["confirmed", "cancelled"],
+    confirmed: ["preparing", "cancelled"],
+    preparing: ["ready", "cancelled"],
+    ready: ["served", "cancelled"],
+  };
+
   async updateStatus(orderId: string, status: string) {
     const order = await this.orderRepo.getById(orderId);
     if (!order) throw new NotFoundError("주문을 찾을 수 없습니다");
 
+    const allowed = OrderService.STATUS_FLOW[order.status];
+    if (!allowed || !allowed.includes(status)) {
+      throw new BadRequestError(`'${order.status}' 상태에서 '${status}'(으)로 변경할 수 없습니다`);
+    }
+
     await this.orderRepo.updateStatus(orderId, status);
-    this.sse.broadcast(order.store_id, "order:updated", {
+
+    const eventType = status === "cancelled" ? "order:cancelled" as const : "order:updated" as const;
+    this.sse.broadcast(order.store_id, eventType, {
       order_id: orderId,
       status,
       updated_at: new Date().toISOString(),

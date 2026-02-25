@@ -57,4 +57,28 @@ describe("SSE Routes", () => {
       expect(res.status).toBe(403);
     });
   });
+
+  describe("GET /api/sse/table-orders", () => {
+    it("sets SSE headers and subscribes (table)", async () => {
+      const res = await supertest(app)
+        .get("/api/sse/table-orders")
+        .set("Authorization", `Bearer ${tableToken}`)
+        .buffer(false)
+        .parse((res, cb) => {
+          let data = "";
+          res.on("data", (chunk: Buffer) => { data += chunk.toString(); });
+          setTimeout(() => { res.destroy(); cb(null, data); }, 50);
+        });
+
+      expect(res.headers["content-type"]).toBe("text/event-stream");
+      expect(mockSubscribe).toHaveBeenCalledWith("store-001", expect.anything());
+    });
+
+    it("returns 403 with admin role", async () => {
+      const res = await supertest(app)
+        .get("/api/sse/table-orders")
+        .set("Authorization", `Bearer ${adminToken}`);
+      expect(res.status).toBe(403);
+    });
+  });
 });
