@@ -5,7 +5,7 @@ import { AppLayout } from './components/AppLayout';
 import { LoginPage } from './pages/login/LoginPage';
 import { DashboardPage } from './pages/dashboard/DashboardPage';
 import { TablesPage } from './pages/tables/TablesPage';
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster } from '@hai-s/dd';
 
 function App() {
   return (

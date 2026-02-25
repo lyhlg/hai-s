@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@hai-s/dd';
 
 export function DashboardPage() {
   return (
@@ -9,7 +9,7 @@ export function DashboardPage() {
           <CardTitle>주문 모니터링</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">Phase 2에서 구현 예정</p>
+          <p className="text-gray-500">Phase 2에서 구현 예정</p>
         </CardContent>
       </Card>
     </div>

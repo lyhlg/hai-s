@@ -2,11 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { AxiosError } from 'axios';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button, Input, Label, Card, CardContent, CardHeader, CardTitle, Alert, AlertDescription } from '@hai-s/dd';
 
 export function LoginPage() {
   const { login, isAuthenticated } = useAuth();
@@ -44,7 +40,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted/40">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl text-center">관리자 로그인</CardTitle>
