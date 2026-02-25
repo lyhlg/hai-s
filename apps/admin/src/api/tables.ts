@@ -6,8 +6,8 @@ export interface CreateTableRequest {
   password: string;
 }
 
-// BE 응답에서 password_hash 제외된 형태
-export type TableResponse = Omit<Table, 'password_hash'>;
+// BE 응답 형태 (password_hash 제외)
+export type TableResponse = Table;
 
 export const tableApi = {
   getAll(storeId: number) {
