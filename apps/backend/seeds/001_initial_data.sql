@@ -201,3 +201,7 @@ INSERT INTO order_items (id, order_id, menu_item_id, menu_item_name, quantity, u
   ('oi-sigol-13', 'ord-sigol-05', 'mi-sigol-07', '돌솥비빔밥',  1, 11000, 11000),
   ('oi-sigol-14', 'ord-sigol-05', 'mi-sigol-11', '김치전',      1, 7000,  7000),
   ('oi-sigol-15', 'ord-sigol-05', 'mi-sigol-13', '콜라',        2, 2000,  4000);
+
+
+-- Update image URLs for menu items
+UPDATE menu_items SET image_url = CONCAT('/images/menu/', id, '.png');
