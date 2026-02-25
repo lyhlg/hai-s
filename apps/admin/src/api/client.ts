@@ -38,3 +38,21 @@ export function getToken(): string | null {
 export function clearToken() {
   localStorage.removeItem(TOKEN_KEY);
 }
+
+// API methods
+export const apiMethods = {
+  getTables: (storeId: string) => 
+    api.get(`/stores/${storeId}/tables`).then(res => res.data),
+  
+  getOrders: (sessionId: number) => 
+    api.get(`/orders?sessionId=${sessionId}`).then(res => res.data),
+  
+  updateOrderStatus: (orderId: string, status: string) => 
+    api.put(`/orders/${orderId}/status`, { status }).then(res => res.data),
+  
+  deleteOrder: (orderId: string) => 
+    api.delete(`/orders/${orderId}`).then(res => res.data),
+  
+  endSession: (storeId: string, tableId: string) => 
+    api.post(`/stores/${storeId}/tables/${tableId}/end-session`).then(res => res.data),
+};

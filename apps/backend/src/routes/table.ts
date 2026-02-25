@@ -22,7 +22,14 @@ const tableService = new TableService(
 const orderRepo = new OrderRepository(pool);
 
 function toResponse(t: Table) {
-  return { id: t.id, storeId: t.store_id, tableNumber: t.table_number, capacity: t.capacity, isActive: t.is_active, createdAt: t.created_at };
+  return { 
+    id: t.id, 
+    storeId: t.store_id, 
+    tableNumber: t.table_number, 
+    capacity: t.capacity, 
+    isActive: t.is_active, 
+    createdAt: t.created_at instanceof Date ? t.created_at.toISOString() : t.created_at 
+  };
 }
 
 tableRouter.post("/:storeId/tables", auth, authorize("admin"), validate(createTableSchema), async (req, res, next) => {

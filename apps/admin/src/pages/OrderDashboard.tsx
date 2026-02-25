@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { api } from "../api/client";
+import { apiMethods } from "../api/client";
 
 const STATUS_LABEL: Record<string, string> = { pending: "대기중", confirmed: "접수", preparing: "준비중", ready: "완료", served: "서빙완료", cancelled: "취소" };
 const STATUS_COLOR: Record<string, string> = { pending: "#ff9800", confirmed: "#2196f3", preparing: "#2196f3", ready: "#4caf50", served: "#9e9e9e", cancelled: "#f44336" };
@@ -11,7 +11,7 @@ export default function OrderDashboard({ storeId }: { storeId: string }) {
   const [orders, setOrders] = useState<any[]>([]);
 
   useEffect(() => {
-    api.getTables(storeId).then(setTables).catch(() => {});
+    apiMethods.getTables(storeId).then(setTables).catch(() => {});
   }, [storeId]);
 
   // SSE 연결
@@ -25,7 +25,7 @@ export default function OrderDashboard({ storeId }: { storeId: string }) {
         if (event.type === "order:created" || event.type === "order:updated" || event.type === "order:cancelled") {
           // 선택된 테이블의 주문 새로고침
           if (selectedTable) {
-            api.getTables(storeId).then(setTables).catch(() => {});
+            apiMethods.getTables(storeId).then(setTables).catch(() => {});
           }
         }
       } catch { /* ignore */ }
@@ -43,7 +43,7 @@ export default function OrderDashboard({ storeId }: { storeId: string }) {
         headers: { Authorization: `Bearer ${localStorage.getItem("admin_token")}` },
       }).then((r) => r.json());
       if (session?.id) {
-        const orders = await api.getOrders(session.id);
+        const orders = await apiMethods.getOrders(session.id);
         setOrders(orders);
       } else {
         setOrders([]);
@@ -55,7 +55,7 @@ export default function OrderDashboard({ storeId }: { storeId: string }) {
     const next = NEXT_STATUS[currentStatus];
     if (!next) return;
     try {
-      await api.updateOrderStatus(orderId, next);
+      await apiMethods.updateOrderStatus(orderId, next);
       setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, status: next } : o)));
     } catch (err: any) { alert(err.message); }
   };
@@ -63,7 +63,7 @@ export default function OrderDashboard({ storeId }: { storeId: string }) {
   const handleDelete = async (orderId: string) => {
     if (!confirm("이 주문을 삭제하시겠습니까?")) return;
     try {
-      await api.deleteOrder(orderId);
+      await apiMethods.deleteOrder(orderId);
       setOrders((prev) => prev.filter((o) => o.id !== orderId));
     } catch (err: any) { alert(err.message); }
   };
@@ -71,7 +71,7 @@ export default function OrderDashboard({ storeId }: { storeId: string }) {
   const handleEndSession = async (tableId: string) => {
     if (!confirm("정말 이용 완료 처리하시겠습니까?")) return;
     try {
-      await api.endSession(storeId, tableId);
+      await apiMethods.endSession(storeId, tableId);
       setOrders([]);
       setSelectedTable(null);
       alert("이용 완료 처리되었습니다");
@@ -98,7 +98,18 @@ export default function OrderDashboard({ storeId }: { storeId: string }) {
           <>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <h3>테이블 {selectedTable.tableNumber} 주문</h3>
-              <button onClick={() => handleEndSession(selectedTable.id)} style={{ padding: "8px 16px", background: "#f44336", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer" }}>
+              <button 
+                onClick={() => handleEndSession(selectedTable.id)} 
+                disabled={orders.length === 0}
+                style={{ 
+                  padding: "8px 16px", 
+                  background: orders.length === 0 ? "#ccc" : "#f44336", 
+                  color: "#fff", 
+                  border: "none", 
+                  borderRadius: 8, 
+                  cursor: orders.length === 0 ? "not-allowed" : "pointer" 
+                }}
+              >
                 이용 완료
               </button>
             </div>
