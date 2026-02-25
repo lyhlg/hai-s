@@ -17,11 +17,11 @@ describe("auth middleware", () => {
     const authMiddleware = authenticate(SECRET);
 
     it("sets req.user on valid token", () => {
-      const token = jwt.sign({ userId: "u1", storeId: "s1", role: "admin" }, SECRET);
+      const token = jwt.sign({ userId: 1, storeId: 1, role: "admin" }, SECRET);
       const { req, res, next } = mockReqRes(token);
 
       authMiddleware(req, res, next);
-      expect((req as any).user).toMatchObject({ userId: "u1", storeId: "s1", role: "admin" });
+      expect((req as any).user).toMatchObject({ userId: 1, storeId: 1, role: "admin" });
       expect(next).toHaveBeenCalled();
     });
 

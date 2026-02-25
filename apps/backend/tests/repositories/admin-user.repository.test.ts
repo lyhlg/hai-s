@@ -12,22 +12,14 @@ describe("AdminUserRepository", () => {
   });
 
   it("findByStoreAndUsername returns user when found", async () => {
-    const row = { id: "admin-001", store_id: "store-001", username: "admin", password_hash: "hash", created_at: new Date() };
+    const row = { id: 1, store_id: 1, username: "admin", password_hash: "hash", created_at: new Date() };
     mockPool.execute.mockResolvedValue([[row]]);
-
-    const result = await repo.findByStoreAndUsername("store-001", "admin");
-    expect(result).toEqual({
-      id: "admin-001",
-      store_id: "store-001",
-      username: "admin",
-      password_hash: "hash",
-      created_at: row.created_at,
-    });
+    const result = await repo.findByStoreAndUsername(1, "admin");
+    expect(result).toEqual({ id: 1, store_id: 1, username: "admin", password_hash: "hash", created_at: row.created_at });
   });
 
   it("findByStoreAndUsername returns null when not found", async () => {
     mockPool.execute.mockResolvedValue([[]]);
-    const result = await repo.findByStoreAndUsername("store-001", "nonexistent");
-    expect(result).toBeNull();
+    expect(await repo.findByStoreAndUsername(1, "nonexistent")).toBeNull();
   });
 });

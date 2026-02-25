@@ -1,7 +1,7 @@
 // Auth types
 export interface AdminUser {
-  id: string;
-  store_id: string;
+  id: number;
+  store_id: number;
   username: string;
   created_at: Date;
 }
@@ -12,9 +12,9 @@ export interface AdminUserWithPassword extends AdminUser {
 }
 
 export interface TableSession {
-  id: string;
-  store_id: string;
-  table_id: string;
+  id: number;
+  store_id: number;
+  table_id: number;
   started_at: Date;
   completed_at: Date | null;
   is_active: boolean;
@@ -32,10 +32,10 @@ export interface LoginResponse {
 
 // JWT Claims
 export interface UserClaims {
-  userId?: string;
-  tableId?: string;
-  storeId: string;
-  tableNumber?: number;
+  userId?: number;
+  tableId?: number;
+  storeId: number;
+  tableNumber?: string;
   role: UserRole;
 }
 

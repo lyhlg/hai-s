@@ -11,7 +11,7 @@ export class TableService {
     private sessionRepo: SessionRepository,
   ) {}
 
-  async createTable(storeId: string, tableNumber: number, password: string) {
+  async createTable(storeId: number, tableNumber: string, password: string, capacity?: number) {
     if (!(await this.storeRepo.validate(storeId))) {
       throw new NotFoundError("매장을 찾을 수 없습니다");
     }
@@ -19,17 +19,17 @@ export class TableService {
       throw new ConflictError("이미 존재하는 테이블 번호입니다");
     }
     const passwordHash = await hashPassword(password);
-    return this.tableRepo.create(storeId, tableNumber, passwordHash);
+    return this.tableRepo.create(storeId, tableNumber, passwordHash, capacity);
   }
 
-  async getTables(storeId: string) {
+  async getTables(storeId: number) {
     if (!(await this.storeRepo.validate(storeId))) {
       throw new NotFoundError("매장을 찾을 수 없습니다");
     }
     return this.tableRepo.getByStore(storeId);
   }
 
-  async getTable(storeId: string, tableId: string) {
+  async getTable(storeId: number, tableId: number) {
     const table = await this.tableRepo.getById(tableId);
     if (!table || table.store_id !== storeId) {
       throw new NotFoundError("테이블을 찾을 수 없습니다");
@@ -37,19 +37,19 @@ export class TableService {
     return table;
   }
 
-  async startSession(storeId: string, tableId: string) {
+  async startSession(storeId: number, tableId: number) {
     const existing = await this.sessionRepo.findActive(storeId, tableId);
     if (existing) return existing;
     return this.sessionRepo.create(storeId, tableId);
   }
 
-  async endSession(storeId: string, tableId: string) {
+  async endSession(storeId: number, tableId: number) {
     const session = await this.sessionRepo.findActive(storeId, tableId);
     if (!session) throw new BadRequestError("활성 세션이 없습니다");
     return this.sessionRepo.endSession(session.id);
   }
 
-  async getActiveSession(storeId: string, tableId: string) {
+  async getActiveSession(storeId: number, tableId: number) {
     return this.sessionRepo.findActive(storeId, tableId);
   }
 }

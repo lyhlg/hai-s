@@ -1,6 +1,6 @@
 // Store types
 export interface Store {
-  id: string;
+  id: number;
   name: string;
   created_at: Date;
 }

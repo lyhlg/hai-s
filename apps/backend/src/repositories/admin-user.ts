@@ -4,7 +4,7 @@ import type { AdminUserWithPassword } from "@hai-s/shared";
 export class AdminUserRepository {
   constructor(private pool: Pool) {}
 
-  async findByStoreAndUsername(storeId: string, username: string): Promise<AdminUserWithPassword | null> {
+  async findByStoreAndUsername(storeId: number, username: string): Promise<AdminUserWithPassword | null> {
     const [rows] = await this.pool.execute(
       "SELECT * FROM admin_users WHERE store_id = ? AND username = ?",
       [storeId, username],

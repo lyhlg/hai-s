@@ -15,7 +15,7 @@ export class AuthService {
     private jwtSecret: string,
   ) {}
 
-  async loginAdmin(storeId: string, username: string, password: string) {
+  async loginAdmin(storeId: number, username: string, password: string) {
     if (!(await this.storeRepo.validate(storeId))) {
       throw new NotFoundError("매장을 찾을 수 없습니다");
     }
@@ -24,7 +24,7 @@ export class AuthService {
     await this.checkLoginAllowed(identifier);
 
     const user = await this.adminUserRepo.findByStoreAndUsername(storeId, username);
-    if (!user || !(await comparePassword(password, user.password_hash!))) {
+    if (!user || !(await comparePassword(password, user.password_hash))) {
       await this.loginAttemptRepo.record(identifier, false);
       throw new UnauthorizedError("매장 ID, 사용자명 또는 비밀번호가 올바르지 않습니다");
     }
@@ -37,7 +37,7 @@ export class AuthService {
     return { token, expiresAt: new Date(decoded.exp! * 1000).toISOString() };
   }
 
-  async loginTable(storeId: string, tableNumber: number, password: string) {
+  async loginTable(storeId: number, tableNumber: string, password: string) {
     if (!(await this.storeRepo.validate(storeId))) {
       throw new NotFoundError("매장을 찾을 수 없습니다");
     }
@@ -46,7 +46,7 @@ export class AuthService {
     await this.checkLoginAllowed(identifier);
 
     const table = await this.tableRepo.findByStoreAndNumber(storeId, tableNumber);
-    if (!table || !(await comparePassword(password, table.password_hash!))) {
+    if (!table || !(await comparePassword(password, table.password_hash))) {
       await this.loginAttemptRepo.record(identifier, false);
       throw new UnauthorizedError("매장 ID, 테이블 번호 또는 비밀번호가 올바르지 않습니다");
     }
