@@ -46,9 +46,9 @@
 
 ### Step 7: 검증
 - [x] `pnpm build` 성공 확인
-- [ ] mock API로 로그인 플로우 동작 확인 (브라우저)
-- [ ] mock API로 테이블 CRUD 동작 확인 (브라우저)
-- [ ] 브라우저 새로고침 시 세션 유지 확인
+- [x] mock API로 로그인 플로우 동작 확인 (브라우저)
+- [x] mock API로 테이블 CRUD 동작 확인 (브라우저)
+- [x] 브라우저 새로고침 시 세션 유지 확인
 
 ### Step 8: UI (shadcn/ui)
 - [x] shadcn/ui 설치 + Tailwind CSS v4 설정
