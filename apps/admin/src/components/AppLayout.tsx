@@ -1,8 +1,6 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
+import { Button, Separator, cn } from '@hai-s/dd';
 
 const navItems = [
   { path: '/', label: '대시보드' },
@@ -15,7 +13,7 @@ export function AppLayout() {
 
   return (
     <div className="flex min-h-screen">
-      <aside className="w-56 border-r bg-muted/40 p-4 flex flex-col">
+      <aside className="w-56 border-r bg-gray-50 p-4 flex flex-col">
         <h2 className="text-lg font-semibold mb-4">관리자</h2>
         <Separator className="mb-4" />
         <nav className="flex flex-col gap-1 flex-1">

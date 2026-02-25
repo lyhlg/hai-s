@@ -1,16 +1,13 @@
 import { useState, type FormEvent } from 'react';
 import { useTables } from '@/hooks/useTables';
 import { AxiosError } from 'axios';
-import { toast } from 'sonner';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Spinner } from '@/components/ui/spinner';
+import { toast } from '@hai-s/dd';
+import {
+  Button, Input, Label, Card, CardContent, CardHeader, CardTitle,
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
+  Badge, Alert, AlertDescription, Spinner,
+} from '@hai-s/dd';
 
 export function TablesPage() {
   const { tables, loading, error: fetchError, create } = useTables();
@@ -34,7 +31,7 @@ export function TablesPage() {
       setTableNumber('');
       setPassword('');
       setOpen(false);
-      toast.success('테이블이 생성되었습니다');
+      toast({ title: '테이블이 생성되었습니다', variant: 'success' });
     } catch (err) {
       if (err instanceof AxiosError) {
         setCreateError(err.response?.data?.message ?? '테이블 생성 실패');
@@ -96,7 +93,7 @@ export function TablesPage() {
             </Alert>
           )}
           {!loading && tables.length === 0 && (
-            <p className="text-center text-muted-foreground py-8">등록된 테이블이 없습니다</p>
+            <p className="text-center text-gray-500 py-8">등록된 테이블이 없습니다</p>
           )}
           {tables.length > 0 && (
             <Table>
