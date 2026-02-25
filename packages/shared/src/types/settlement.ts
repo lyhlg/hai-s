@@ -3,14 +3,18 @@ export interface DailySales {
   date: string;
   total_orders: number;
   total_amount: number;
-  total_customers: number;
 }
 
-export interface SessionSettlement {
-  session_id: number;
-  table_number: string;
-  start_time: Date;
-  end_time: Date;
+export interface TableSales {
+  table_id: string;
+  table_number: number;
   total_orders: number;
   total_amount: number;
+}
+
+export interface DailySalesResponse {
+  date: string;
+  total_orders: number;
+  total_amount: number;
+  tables: TableSales[];
 }
