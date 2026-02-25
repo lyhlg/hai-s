@@ -2,8 +2,10 @@
 export type OrderStatus = 'pending' | 'confirmed' | 'preparing' | 'ready' | 'served' | 'cancelled';
 
 export interface Order {
-  id: number;
-  session_id: number;
+  id: string;
+  store_id: string;
+  session_id: string;
+  table_id: string;
   status: OrderStatus;
   total_amount: number;
   created_at: Date;
@@ -11,25 +13,26 @@ export interface Order {
 }
 
 export interface OrderItem {
-  id: number;
-  order_id: number;
-  menu_item_id: number;
+  id: string;
+  order_id: string;
+  menu_item_id: string;
+  menu_item_name: string;
   quantity: number;
   unit_price: number;
   subtotal: number;
-  special_requests: string | null;
 }
 
 export interface CreateOrderInput {
-  session_id: number;
   items: {
-    menu_item_id: number;
+    menu_item_id: string;
     quantity: number;
-    unit_price: number;
-    special_requests?: string;
   }[];
 }
 
 export interface UpdateOrderStatusInput {
   status: OrderStatus;
+}
+
+export interface OrderWithItems extends Order {
+  items: OrderItem[];
 }

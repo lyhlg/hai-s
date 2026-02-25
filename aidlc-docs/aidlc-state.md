@@ -32,10 +32,10 @@
 - [ ] Code Generation - PENDING
 
 #### Unit 3: Order
-- [ ] Functional Design - PENDING
-- [ ] NFR Requirements - PENDING
-- [ ] NFR Design - PENDING
-- [ ] Code Generation - PENDING
+- [x] Functional Design (SKIPPED - plan에 통합)
+- [x] NFR Requirements (SKIPPED - Unit 1 패턴 재사용)
+- [x] NFR Design (SKIPPED - Unit 1 패턴 재사용)
+- [x] Code Generation - COMPLETED
 
 #### Unit 4: Session & Settlement
 - [ ] Functional Design - PENDING
@@ -54,4 +54,4 @@
 - **Current Stage**: Functional Design (Unit 2: Menu)
 - **Next Stage**: NFR Requirements (Unit 2: Menu)
 - **Status**: In Progress
-- **Last Updated**: 2026-02-25T15:35:14+09:00
+- **Last Updated**: 2026-02-25T15:44:00+09:00
