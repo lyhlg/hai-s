@@ -1,6 +1,16 @@
 import { useState, type FormEvent } from 'react';
-import { useTables } from '../../hooks/useTables';
+import { useTables } from '@/hooks/useTables';
 import { AxiosError } from 'axios';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Spinner } from '@/components/ui/spinner';
 
 export function TablesPage() {
   const { tables, loading, error: fetchError, create } = useTables();
@@ -8,6 +18,7 @@ export function TablesPage() {
   const [password, setPassword] = useState('');
   const [createError, setCreateError] = useState('');
   const [creating, setCreating] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleCreate = async (e: FormEvent) => {
     e.preventDefault();
@@ -22,6 +33,8 @@ export function TablesPage() {
       await create({ tableNumber: num, password });
       setTableNumber('');
       setPassword('');
+      setOpen(false);
+      toast.success('테이블이 생성되었습니다');
     } catch (err) {
       if (err instanceof AxiosError) {
         setCreateError(err.response?.data?.message ?? '테이블 생성 실패');
@@ -34,48 +47,85 @@ export function TablesPage() {
   };
 
   return (
-    <div>
-      <h1>테이블 관리</h1>
+    <div className="flex flex-col gap-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">테이블 관리</h1>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button>테이블 추가</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>새 테이블 생성</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleCreate} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="tableNumber">테이블 번호</Label>
+                <Input id="tableNumber" type="number" min="1" value={tableNumber} onChange={(e) => setTableNumber(e.target.value)} placeholder="예: 1" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="tablePassword">비밀번호</Label>
+                <Input id="tablePassword" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="태블릿 로그인용 비밀번호" />
+              </div>
+              {createError && (
+                <Alert variant="destructive">
+                  <AlertDescription>{createError}</AlertDescription>
+                </Alert>
+              )}
+              <Button type="submit" disabled={creating}>
+                {creating ? '생성 중...' : '생성'}
+              </Button>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
 
-      <section>
-        <h2>테이블 생성</h2>
-        <form onSubmit={handleCreate}>
-          <div>
-            <label htmlFor="tableNumber">테이블 번호</label>
-            <input id="tableNumber" type="number" min="1" value={tableNumber} onChange={(e) => setTableNumber(e.target.value)} />
-          </div>
-          <div>
-            <label htmlFor="tablePassword">비밀번호</label>
-            <input id="tablePassword" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          </div>
-          {createError && <p role="alert">{createError}</p>}
-          <button type="submit" disabled={creating}>{creating ? '생성 중...' : '테이블 생성'}</button>
-        </form>
-      </section>
-
-      <section>
-        <h2>테이블 목록</h2>
-        {loading && <p>로딩 중...</p>}
-        {fetchError && <p role="alert">{fetchError}</p>}
-        {!loading && tables.length === 0 && <p>등록된 테이블이 없습니다</p>}
-        {tables.length > 0 && (
-          <table>
-            <thead>
-              <tr><th>ID</th><th>테이블 번호</th><th>수용 인원</th><th>활성</th></tr>
-            </thead>
-            <tbody>
-              {tables.map((t) => (
-                <tr key={t.id}>
-                  <td>{t.id}</td>
-                  <td>{t.table_number}</td>
-                  <td>{t.capacity}</td>
-                  <td>{t.is_active ? '✅' : '❌'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </section>
+      <Card>
+        <CardHeader>
+          <CardTitle>테이블 목록</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {loading && (
+            <div className="flex justify-center py-8">
+              <Spinner className="size-6" />
+            </div>
+          )}
+          {fetchError && (
+            <Alert variant="destructive">
+              <AlertDescription>{fetchError}</AlertDescription>
+            </Alert>
+          )}
+          {!loading && tables.length === 0 && (
+            <p className="text-center text-muted-foreground py-8">등록된 테이블이 없습니다</p>
+          )}
+          {tables.length > 0 && (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID</TableHead>
+                  <TableHead>테이블 번호</TableHead>
+                  <TableHead>수용 인원</TableHead>
+                  <TableHead>상태</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {tables.map((t) => (
+                  <TableRow key={t.id}>
+                    <TableCell>{t.id}</TableCell>
+                    <TableCell className="font-medium">{t.table_number}</TableCell>
+                    <TableCell>{t.capacity}명</TableCell>
+                    <TableCell>
+                      <Badge variant={t.is_active ? 'default' : 'secondary'}>
+                        {t.is_active ? '활성' : '비활성'}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

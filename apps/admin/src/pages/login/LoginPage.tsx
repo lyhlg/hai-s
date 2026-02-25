@@ -1,16 +1,26 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { AxiosError } from 'axios';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export function LoginPage() {
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [storeId, setStoreId] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  if (isAuthenticated) {
+    navigate('/', { replace: true });
+    return null;
+  }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -25,8 +35,7 @@ export function LoginPage() {
       navigate('/', { replace: true });
     } catch (err) {
       if (err instanceof AxiosError) {
-        const msg = err.response?.data?.message ?? '로그인에 실패했습니다';
-        setError(msg);
+        setError(err.response?.data?.message ?? '로그인에 실패했습니다');
       } else {
         setError('로그인에 실패했습니다');
       }
@@ -36,24 +45,36 @@ export function LoginPage() {
   };
 
   return (
-    <div>
-      <h1>관리자 로그인</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="storeId">매장 ID</label>
-          <input id="storeId" value={storeId} onChange={(e) => setStoreId(e.target.value)} />
-        </div>
-        <div>
-          <label htmlFor="username">사용자명</label>
-          <input id="username" value={username} onChange={(e) => setUsername(e.target.value)} />
-        </div>
-        <div>
-          <label htmlFor="password">비밀번호</label>
-          <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </div>
-        {error && <p role="alert">{error}</p>}
-        <button type="submit" disabled={loading}>{loading ? '로그인 중...' : '로그인'}</button>
-      </form>
+    <div className="flex min-h-screen items-center justify-center bg-muted/40">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-2xl text-center">관리자 로그인</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="storeId">매장 ID</Label>
+              <Input id="storeId" value={storeId} onChange={(e) => setStoreId(e.target.value)} placeholder="매장 ID 입력" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="username">사용자명</Label>
+              <Input id="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="사용자명 입력" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="password">비밀번호</Label>
+              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호 입력" />
+            </div>
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading ? '로그인 중...' : '로그인'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
