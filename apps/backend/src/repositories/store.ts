@@ -8,7 +8,13 @@ export class StoreRepository {
     const [rows] = await this.pool.execute("SELECT * FROM stores WHERE id = ?", [id]);
     const arr = rows as any[];
     if (arr.length === 0) return null;
-    return { id: arr[0].id, name: arr[0].name, createdAt: arr[0].created_at };
+    return { 
+      id: arr[0].id, 
+      name: arr[0].name, 
+      address: arr[0].address,
+      phone: arr[0].phone,
+      created_at: arr[0].created_at 
+    };
   }
 
   async validate(id: string): Promise<boolean> {
