@@ -3,7 +3,7 @@
 ## Project Information
 - **Project Type**: Greenfield
 - **Start Date**: 2026-02-25T12:02:33Z
-- **Current Stage**: CONSTRUCTION - Functional Design (Unit 2: Menu)
+- **Current Stage**: CONSTRUCTION - Build and Test
 
 ## Stage Progress
 
@@ -18,40 +18,52 @@
 
 ### 🟢 CONSTRUCTION PHASE
 
-#### Unit 1: Core
+#### Unit 1: Core (BE)
 - [x] Functional Design - COMPLETED
 - [x] NFR Requirements - COMPLETED
 - [x] NFR Design - COMPLETED
 - [x] Infrastructure Design (SKIPPED)
 - [x] Code Generation - COMPLETED
 
-#### Unit 2: Menu
-- [ ] Functional Design - IN PROGRESS
-- [ ] NFR Requirements - PENDING
-- [ ] NFR Design - PENDING
-- [ ] Code Generation - PENDING
+#### Unit 2: Menu (BE)
+- [x] Code Generation - COMPLETED (T5)
 
-#### Unit 3: Order
-- [x] Functional Design (SKIPPED - plan에 통합)
-- [x] NFR Requirements (SKIPPED - Unit 1 패턴 재사용)
-- [x] NFR Design (SKIPPED - Unit 1 패턴 재사용)
-- [x] Code Generation - COMPLETED
+#### Unit 3: Order + SSE (BE)
+- [x] Code Generation - COMPLETED (T6)
 
-#### Unit 4: Session & Settlement
-- [ ] Functional Design - PENDING
-- [ ] NFR Requirements - PENDING
-- [ ] NFR Design - PENDING
-- [ ] Code Generation - PENDING
+#### Unit 4: Session & Settlement (BE)
+- [x] Code Generation - COMPLETED (T9: Settlement, T10: 과거 내역)
+
+#### Customer App (FE)
+- [x] Code Generation - COMPLETED (T7 + T11)
+
+#### Admin App (FE)
+- [x] Code Generation - COMPLETED (T8 + T12)
 
 #### Post-Unit Stages
-- [ ] Build and Test - PENDING
+- [x] Build and Test - COMPLETED (BE: 22 files, 150 tests passed / FE: build success)
 
 ### 🟡 OPERATIONS PHASE
 - [ ] Operations - PLACEHOLDER
 
+## Ticket Progress
+
+| Ticket | 설명 | 상태 |
+|--------|------|------|
+| T1 | 프로젝트 셋업 | ✅ COMPLETED |
+| T2 | Auth + Store + Table BE | ✅ COMPLETED |
+| T3 | Customer App 셋업 + 로그인 | ✅ COMPLETED |
+| T4 | Admin App 셋업 + 로그인 | ✅ COMPLETED |
+| T5 | Menu BE | ✅ COMPLETED |
+| T6 | Order + SSE BE | ✅ COMPLETED |
+| T7 | Customer App 메뉴 + 장바구니 + 주문 | ✅ COMPLETED |
+| T8 | Admin App 메뉴관리 + 주문 모니터링 | ✅ COMPLETED |
+| T9 | Settlement BE | ✅ COMPLETED |
+| T10 | 세션 종료 + 과거 내역 BE | ✅ COMPLETED |
+| T11 | Customer App 통합 | ✅ COMPLETED |
+| T12 | Admin App 정산 + 세션종료 + 과거내역 | ✅ COMPLETED |
+
 ## Current Status
-- **Lifecycle Phase**: CONSTRUCTION
-- **Current Stage**: Functional Design (Unit 2: Menu)
-- **Next Stage**: NFR Requirements (Unit 2: Menu)
-- **Status**: In Progress
-- **Last Updated**: 2026-02-25T15:44:00+09:00
+- **Lifecycle Phase**: CONSTRUCTION COMPLETE
+- **Status**: All tickets completed
+- **Last Updated**: 2026-02-25T16:04:00+09:00

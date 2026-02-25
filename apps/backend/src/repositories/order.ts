@@ -89,6 +89,32 @@ export class OrderRepository {
     return orders.map((o: any) => ({ ...this.toOrder(o), items: itemsByOrder.get(o.id) || [] }));
   }
 
+  async getByTableHistory(storeId: string, tableId: string, date?: string): Promise<OrderWithItems[]> {
+    let sql = `SELECT o.* FROM orders o
+      JOIN table_sessions ts ON o.session_id = ts.id
+      WHERE o.store_id = ? AND o.table_id = ? AND ts.is_active = false`;
+    const params: any[] = [storeId, tableId];
+    if (date) { sql += " AND DATE(o.created_at) = ?"; params.push(date); }
+    sql += " ORDER BY o.created_at DESC";
+
+    const [rows] = await this.pool.execute(sql, params);
+    const orders = rows as any[];
+    if (orders.length === 0) return [];
+
+    const ids = orders.map((o: any) => o.id);
+    const [itemRows] = await this.pool.execute(
+      `SELECT * FROM order_items WHERE order_id IN (${ids.map(() => "?").join(",")})`,
+      ids,
+    );
+    const itemsByOrder = new Map<string, OrderItem[]>();
+    for (const r of itemRows as any[]) {
+      const list = itemsByOrder.get(r.order_id) || [];
+      list.push(this.toItem(r));
+      itemsByOrder.set(r.order_id, list);
+    }
+    return orders.map((o: any) => ({ ...this.toOrder(o), items: itemsByOrder.get(o.id) || [] }));
+  }
+
   async updateStatus(orderId: string, status: string): Promise<void> {
     await this.pool.execute("UPDATE orders SET status = ?, updated_at = ? WHERE id = ?", [status, new Date(), orderId]);
   }

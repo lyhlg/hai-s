@@ -8,6 +8,7 @@ import { TableService } from "../services/table.js";
 import { StoreRepository } from "../repositories/store.js";
 import { TableRepository } from "../repositories/table.js";
 import { SessionRepository } from "../repositories/session.js";
+import { OrderRepository } from "../repositories/order.js";
 import type { Table } from "@hai-s/shared";
 
 export const tableRouter = Router();
@@ -18,6 +19,7 @@ const tableService = new TableService(
   new TableRepository(pool),
   new SessionRepository(pool),
 );
+const orderRepo = new OrderRepository(pool);
 
 function toResponse(t: Table) {
   return { id: t.id, storeId: t.store_id, tableNumber: t.table_number, capacity: t.capacity, isActive: t.is_active, createdAt: t.created_at };
@@ -82,6 +84,18 @@ tableRouter.get("/:storeId/tables/:tableId/session", auth, authorize("admin", "t
     const tableId = Number(req.params.tableId);
     const session = await tableService.getActiveSession(storeId, tableId);
     res.json(session);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /:storeId/tables/:tableId/order-history - 과거 주문 내역 (Admin only)
+tableRouter.get("/:storeId/tables/:tableId/order-history", auth, authorize("admin"), async (req, res, next) => {
+  try {
+    const { storeId, tableId } = req.params as Record<string, string>;
+    const date = req.query.date as string | undefined;
+    const orders = await orderRepo.getByTableHistory(storeId, tableId, date);
+    res.json(orders);
   } catch (err) {
     next(err);
   }
