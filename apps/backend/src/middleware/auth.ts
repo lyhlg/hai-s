@@ -12,14 +12,22 @@ declare global {
 
 export function authenticate(secret: string) {
   return (req: Request, res: Response, next: NextFunction) => {
+    // Authorization 헤더 또는 쿼리 파라미터에서 토큰 추출
+    let token: string | undefined;
+    
     const authHeader = req.headers.authorization;
-    if (!authHeader?.startsWith("Bearer ")) {
+    if (authHeader?.startsWith("Bearer ")) {
+      token = authHeader.slice(7);
+    } else if (req.query.token && typeof req.query.token === "string") {
+      token = req.query.token;
+    }
+
+    if (!token) {
       res.status(401).json({ error: "UNAUTHORIZED", message: "인증이 필요합니다" });
       return;
     }
 
     try {
-      const token = authHeader.slice(7);
       const claims = jwt.verify(token, secret) as UserClaims;
       req.user = claims;
       next();

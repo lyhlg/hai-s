@@ -86,7 +86,7 @@ export default function OrderDashboard({ storeId }: { storeId: string }) {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
           {tables.map((t) => (
             <button key={t.id} onClick={() => loadOrders(t.id)} style={{ padding: 16, border: selectedTable?.id === t.id ? "2px solid #1976d2" : "1px solid #eee", borderRadius: 8, background: selectedTable?.id === t.id ? "#e3f2fd" : "#fff", cursor: "pointer", textAlign: "center" }}>
-              <div style={{ fontWeight: "bold" }}>T{t.tableNumber}</div>
+              <div style={{ fontWeight: "bold" }}>{t.tableNumber}</div>
             </button>
           ))}
         </div>

@@ -22,7 +22,7 @@ export default function OrderConfirmPage() {
         storeId,
         tableId,
         sessionId,
-        items.map((i) => ({ menuId: Number(i.menuItemId), quantity: i.quantity, unitPrice: i.price }))
+        items.map((i) => ({ menuId: i.menuItemId, quantity: i.quantity, unitPrice: i.price }))
       );
       setOrderId(order.id);
       clearCart();

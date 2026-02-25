@@ -41,7 +41,7 @@ export default function SettlementPage() {
               <tbody>
                 {data.tables.map((t: any) => (
                   <tr key={t.table_id} style={{ borderBottom: "1px solid #eee" }}>
-                    <td style={{ padding: 8 }}>T{t.table_number}</td>
+                    <td style={{ padding: 8 }}>{t.table_number}</td>
                     <td style={{ padding: 8, textAlign: "right" }}>{t.total_orders}건</td>
                     <td style={{ padding: 8, textAlign: "right" }}>{t.total_amount?.toLocaleString()}원</td>
                   </tr>

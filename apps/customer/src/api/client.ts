@@ -38,12 +38,14 @@ export const api = {
   getMenu: (storeId: number) =>
     request<any[]>(`/stores/${storeId}/menu`),
 
-  createOrder: (storeId: number, tableId: number, sessionId: number, items: { menuId: number; quantity: number; unitPrice: number }[]) =>
-    request<any>(`/stores/${storeId}/orders`, {
+  createOrder: (storeId: number, tableId: number, sessionId: number, items: { menuId: string; quantity: number; unitPrice: number }[]) =>
+    request<any>(`/orders`, {
       method: "POST",
-      body: JSON.stringify({ tableId, sessionId, items }),
+      body: JSON.stringify({ 
+        items: items.map(i => ({ menuItemId: i.menuId, quantity: i.quantity }))
+      }),
     }),
 
   getOrders: (storeId: number, sessionId: number) =>
-    request<any[]>(`/stores/${storeId}/orders?sessionId=${sessionId}`),
+    request<any[]>(`/orders?sessionId=${sessionId}`),
 };

@@ -93,6 +93,6 @@ export class OrderService {
     if (!order) throw new NotFoundError("주문을 찾을 수 없습니다");
 
     await this.orderRepo.deleteOrder(orderId);
-    this.sse.broadcast(order.store_id, "order:cancelled", { order_id: orderId });
+    this.sse.broadcast(order.store_id, "order:deleted", { order_id: orderId });
   }
 }

@@ -16,6 +16,8 @@ export default function OrderHistoryPage({ sessionId }: { sessionId: number | nu
   const handleSSE = useCallback((event: any) => {
     if (event.type === "order:updated" || event.type === "order:cancelled") {
       setOrders((prev) => prev.map((o) => (o.id === event.data.order_id ? { ...o, status: event.data.status } : o)));
+    } else if (event.type === "order:deleted") {
+      setOrders((prev) => prev.filter((o) => o.id !== event.data.order_id));
     }
   }, []);
 

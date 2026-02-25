@@ -44,7 +44,7 @@ export default function TableManagement({ storeId }: { storeId: string }) {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: 8 }}>
         {tables.map((t) => (
           <div key={t.id} style={{ border: "1px solid #eee", borderRadius: 8, padding: 12, textAlign: "center" }}>
-            <div style={{ fontWeight: "bold", fontSize: 18 }}>T{t.tableNumber}</div>
+            <div style={{ fontWeight: "bold", fontSize: 18 }}>{t.tableNumber}</div>
             <button onClick={() => handleViewHistory(t)} style={{ marginTop: 8, padding: "4px 8px", fontSize: 12, border: "1px solid #ccc", borderRadius: 4, cursor: "pointer" }}>과거 내역</button>
           </div>
         ))}
