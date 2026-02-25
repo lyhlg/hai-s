@@ -15,10 +15,15 @@ interface AuthContextValue extends AuthState {
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
 
+function decodeBase64Url(str: string): string {
+  const padded = str.replace(/-/g, '+').replace(/_/g, '/');
+  return atob(padded);
+}
+
 function parseToken(token: string): { storeId: number; exp: number } | null {
   try {
     const payload = token.split('.')[1];
-    return JSON.parse(atob(payload));
+    return JSON.parse(decodeBase64Url(payload));
   } catch {
     return null;
   }
