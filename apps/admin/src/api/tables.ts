@@ -1,5 +1,4 @@
 import { api } from './client';
-import type { Table } from '@hai-s/shared';
 
 export interface CreateTableRequest {
   tableNumber: string;
@@ -7,8 +6,15 @@ export interface CreateTableRequest {
   capacity?: number;
 }
 
-// BE 응답 형태 (password_hash 제외)
-export type TableResponse = Table;
+// BE 응답은 camelCase로 변환되어 옴
+export interface TableResponse {
+  id: number;
+  storeId: number;
+  tableNumber: string;
+  capacity: number;
+  isActive: boolean;
+  createdAt: string;
+}
 
 export const tableApi = {
   getAll(storeId: number) {
