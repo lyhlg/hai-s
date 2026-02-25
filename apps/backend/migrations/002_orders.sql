@@ -1,7 +1,7 @@
 -- Menu items (Unit 2 dependency - needed for order FK)
 CREATE TABLE IF NOT EXISTS menu_items (
   id            VARCHAR(36) PRIMARY KEY,
-  store_id      VARCHAR(36) NOT NULL,
+  store_id      INT NOT NULL,
   name          VARCHAR(100) NOT NULL,
   description   TEXT NULL,
   price         INT NOT NULL,
@@ -18,9 +18,9 @@ CREATE TABLE IF NOT EXISTS menu_items (
 -- Orders
 CREATE TABLE orders (
   id            VARCHAR(36) PRIMARY KEY,
-  store_id      VARCHAR(36) NOT NULL,
-  session_id    VARCHAR(36) NOT NULL,
-  table_id      VARCHAR(36) NOT NULL,
+  store_id      INT NOT NULL,
+  session_id    INT NOT NULL,
+  table_id      INT NOT NULL,
   status        ENUM('pending','confirmed','preparing','ready','served','cancelled') DEFAULT 'pending',
   total_amount  INT NOT NULL DEFAULT 0,
   created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

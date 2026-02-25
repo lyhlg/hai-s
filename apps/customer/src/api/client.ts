@@ -19,10 +19,10 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
 export const api = {
   tableLogin: (storeId: number, tableNumber: string, password: string) =>
-    request<{ token: string; storeId: number; tableId: number; tableNumber: string }>(
-      "/auth/table/login",
-      { method: "POST", body: JSON.stringify({ storeId, tableNumber, password }) }
-    ),
+    request<{ token: string; storeId: number; tableId: number; tableNumber: string }>("/auth/table/login", {
+      method: "POST",
+      body: JSON.stringify({ storeId, tableNumber, password }),
+    }),
 
   startSession: (storeId: number, tableId: number) =>
     request<{ sessionId: number }>(

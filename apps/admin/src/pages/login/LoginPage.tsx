@@ -26,7 +26,7 @@ export function LoginPage() {
     setLoading(true);
     setError('');
     try {
-      await login({ storeId, username, password });
+      await login({ storeId: Number(storeId), username, password });
       navigate('/', { replace: true });
     } catch (err) {
       if (err instanceof AxiosError) {

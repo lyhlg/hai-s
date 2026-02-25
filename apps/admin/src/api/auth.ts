@@ -1,7 +1,7 @@
 import { api } from './client';
 
 export interface AdminLoginRequest {
-  storeId: string;
+  storeId: number;
   username: string;
   password: string;
 }
