@@ -1,12 +1,12 @@
 CREATE TABLE stores (
-  id         VARCHAR(36) PRIMARY KEY,
+  id         INT AUTO_INCREMENT PRIMARY KEY,
   name       VARCHAR(100) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE admin_users (
-  id            VARCHAR(36) PRIMARY KEY,
-  store_id      VARCHAR(36) NOT NULL,
+  id            INT AUTO_INCREMENT PRIMARY KEY,
+  store_id      INT NOT NULL,
   username      VARCHAR(50) NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
   created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -15,9 +15,9 @@ CREATE TABLE admin_users (
 );
 
 CREATE TABLE tables_ (
-  id            VARCHAR(36) PRIMARY KEY,
-  store_id      VARCHAR(36) NOT NULL,
-  table_number  INT NOT NULL,
+  id            INT AUTO_INCREMENT PRIMARY KEY,
+  store_id      INT NOT NULL,
+  table_number  VARCHAR(10) NOT NULL,
   capacity      INT NOT NULL DEFAULT 4,
   is_active     BOOLEAN NOT NULL DEFAULT TRUE,
   password_hash VARCHAR(255) NOT NULL,
@@ -27,9 +27,9 @@ CREATE TABLE tables_ (
 );
 
 CREATE TABLE table_sessions (
-  id           VARCHAR(36) PRIMARY KEY,
-  store_id     VARCHAR(36) NOT NULL,
-  table_id     VARCHAR(36) NOT NULL,
+  id           INT AUTO_INCREMENT PRIMARY KEY,
+  store_id     INT NOT NULL,
+  table_id     INT NOT NULL,
   started_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   completed_at TIMESTAMP NULL,
   is_active    BOOLEAN DEFAULT TRUE,
@@ -39,7 +39,7 @@ CREATE TABLE table_sessions (
 );
 
 CREATE TABLE login_attempts (
-  id           VARCHAR(36) PRIMARY KEY,
+  id           INT AUTO_INCREMENT PRIMARY KEY,
   identifier   VARCHAR(255) NOT NULL,
   attempted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   success      BOOLEAN NOT NULL,

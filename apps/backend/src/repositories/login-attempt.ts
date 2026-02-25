@@ -1,5 +1,4 @@
-import type { Pool } from "mysql2/promise";
-import { v4 as uuid } from "uuid";
+import type { Pool, ResultSetHeader } from "mysql2/promise";
 
 export class LoginAttemptRepository {
   constructor(private pool: Pool) {}
@@ -14,8 +13,8 @@ export class LoginAttemptRepository {
 
   async record(identifier: string, success: boolean): Promise<void> {
     await this.pool.execute(
-      "INSERT INTO login_attempts (id, identifier, success) VALUES (?, ?, ?)",
-      [uuid(), identifier, success],
+      "INSERT INTO login_attempts (identifier, success) VALUES (?, ?)",
+      [identifier, success],
     );
   }
 }

@@ -12,7 +12,8 @@ const storeRepo = new StoreRepository(pool);
 
 storeRouter.get("/:storeId", auth, authorize("admin", "table"), async (req, res, next) => {
   try {
-    const store = await storeRepo.getById(req.params.storeId as string);
+    const storeId = Number(req.params.storeId);
+    const store = await storeRepo.getById(storeId);
     if (!store) throw new NotFoundError("매장을 찾을 수 없습니다");
     res.json(store);
   } catch (err) {

@@ -25,7 +25,8 @@ function toResponse(t: Table) {
 
 tableRouter.post("/:storeId/tables", auth, authorize("admin"), validate(createTableSchema), async (req, res, next) => {
   try {
-    const table = await tableService.createTable(req.params.storeId as string, req.body.tableNumber, req.body.password, req.body.capacity);
+    const storeId = Number(req.params.storeId);
+    const table = await tableService.createTable(storeId, req.body.tableNumber, req.body.password, req.body.capacity);
     res.status(201).json(toResponse(table));
   } catch (err) {
     next(err);
@@ -34,7 +35,8 @@ tableRouter.post("/:storeId/tables", auth, authorize("admin"), validate(createTa
 
 tableRouter.get("/:storeId/tables", auth, authorize("admin"), async (req, res, next) => {
   try {
-    const tables = await tableService.getTables(req.params.storeId as string);
+    const storeId = Number(req.params.storeId);
+    const tables = await tableService.getTables(storeId);
     res.json(tables.map(toResponse));
   } catch (err) {
     next(err);
@@ -43,7 +45,8 @@ tableRouter.get("/:storeId/tables", auth, authorize("admin"), async (req, res, n
 
 tableRouter.get("/:storeId/tables/:tableId", auth, authorize("admin", "table"), async (req, res, next) => {
   try {
-    const { storeId, tableId } = req.params as Record<string, string>;
+    const storeId = Number(req.params.storeId);
+    const tableId = Number(req.params.tableId);
     const table = await tableService.getTable(storeId, tableId);
     res.json(toResponse(table));
   } catch (err) {
@@ -53,7 +56,8 @@ tableRouter.get("/:storeId/tables/:tableId", auth, authorize("admin", "table"), 
 
 tableRouter.post("/:storeId/tables/:tableId/start-session", auth, authorize("table"), async (req, res, next) => {
   try {
-    const { storeId, tableId } = req.params as Record<string, string>;
+    const storeId = Number(req.params.storeId);
+    const tableId = Number(req.params.tableId);
     const session = await tableService.startSession(storeId, tableId);
     res.json({ sessionId: session.id });
   } catch (err) {
@@ -63,7 +67,8 @@ tableRouter.post("/:storeId/tables/:tableId/start-session", auth, authorize("tab
 
 tableRouter.post("/:storeId/tables/:tableId/end-session", auth, authorize("admin"), async (req, res, next) => {
   try {
-    const { storeId, tableId } = req.params as Record<string, string>;
+    const storeId = Number(req.params.storeId);
+    const tableId = Number(req.params.tableId);
     const completedAt = await tableService.endSession(storeId, tableId);
     res.json({ completedAt: completedAt.toISOString() });
   } catch (err) {
@@ -73,7 +78,8 @@ tableRouter.post("/:storeId/tables/:tableId/end-session", auth, authorize("admin
 
 tableRouter.get("/:storeId/tables/:tableId/session", auth, authorize("admin", "table"), async (req, res, next) => {
   try {
-    const { storeId, tableId } = req.params as Record<string, string>;
+    const storeId = Number(req.params.storeId);
+    const tableId = Number(req.params.tableId);
     const session = await tableService.getActiveSession(storeId, tableId);
     res.json(session);
   } catch (err) {

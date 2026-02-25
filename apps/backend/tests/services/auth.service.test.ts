@@ -27,24 +27,24 @@ describe("AuthService", () => {
       const { hashPassword } = await import("../../src/utils/password.js");
       const hash = await hashPassword("admin123");
       mockAdminUserRepo.findByStoreAndUsername.mockResolvedValue({
-        id: "admin-001", store_id: "store-001", username: "admin", password_hash: hash,
+        id: 1, store_id: 1, username: "admin", password_hash: hash,
       });
 
-      const result = await service.loginAdmin("store-001", "admin", "admin123");
+      const result = await service.loginAdmin(1, "admin", "admin123");
       expect(result.token).toBeDefined();
       expect(result.expiresAt).toBeDefined();
-      expect(mockLoginAttemptRepo.record).toHaveBeenCalledWith("store:store-001:admin:admin", true);
+      expect(mockLoginAttemptRepo.record).toHaveBeenCalledWith("store:1:admin:admin", true);
     });
 
     it("throws NotFoundError when store does not exist", async () => {
       mockStoreRepo.validate.mockResolvedValue(false);
-      await expect(service.loginAdmin("bad", "admin", "pass")).rejects.toThrow("매장을 찾을 수 없습니다");
+      await expect(service.loginAdmin(999, "admin", "pass")).rejects.toThrow("매장을 찾을 수 없습니다");
     });
 
     it("throws TooManyAttemptsError when login attempts exceeded", async () => {
       mockStoreRepo.validate.mockResolvedValue(true);
       mockLoginAttemptRepo.countRecentFailures.mockResolvedValue(5);
-      await expect(service.loginAdmin("store-001", "admin", "pass")).rejects.toThrow("로그인 시도 횟수를 초과했습니다");
+      await expect(service.loginAdmin(1, "admin", "pass")).rejects.toThrow("로그인 시도 횟수를 초과했습니다");
     });
 
     it("throws UnauthorizedError when user not found", async () => {
@@ -52,8 +52,8 @@ describe("AuthService", () => {
       mockLoginAttemptRepo.countRecentFailures.mockResolvedValue(0);
       mockAdminUserRepo.findByStoreAndUsername.mockResolvedValue(null);
 
-      await expect(service.loginAdmin("store-001", "admin", "pass")).rejects.toThrow("매장 ID, 사용자명 또는 비밀번호가 올바르지 않습니다");
-      expect(mockLoginAttemptRepo.record).toHaveBeenCalledWith("store:store-001:admin:admin", false);
+      await expect(service.loginAdmin(1, "admin", "pass")).rejects.toThrow("매장 ID, 사용자명 또는 비밀번호가 올바르지 않습니다");
+      expect(mockLoginAttemptRepo.record).toHaveBeenCalledWith("store:1:admin:admin", false);
     });
 
     it("throws UnauthorizedError on wrong password", async () => {
@@ -62,11 +62,11 @@ describe("AuthService", () => {
       const { hashPassword } = await import("../../src/utils/password.js");
       const hash = await hashPassword("correct");
       mockAdminUserRepo.findByStoreAndUsername.mockResolvedValue({
-        id: "admin-001", store_id: "store-001", username: "admin", password_hash: hash,
+        id: 1, store_id: 1, username: "admin", password_hash: hash,
       });
 
-      await expect(service.loginAdmin("store-001", "admin", "wrong")).rejects.toThrow("매장 ID, 사용자명 또는 비밀번호가 올바르지 않습니다");
-      expect(mockLoginAttemptRepo.record).toHaveBeenCalledWith("store:store-001:admin:admin", false);
+      await expect(service.loginAdmin(1, "admin", "wrong")).rejects.toThrow("매장 ID, 사용자명 또는 비밀번호가 올바르지 않습니다");
+      expect(mockLoginAttemptRepo.record).toHaveBeenCalledWith("store:1:admin:admin", false);
     });
   });
 
@@ -77,32 +77,32 @@ describe("AuthService", () => {
       const { hashPassword } = await import("../../src/utils/password.js");
       const hash = await hashPassword("table123");
       mockTableRepo.findByStoreAndNumber.mockResolvedValue({
-        id: "table-001", store_id: "store-001", table_number: 1, capacity: 4, is_active: true, password_hash: hash,
+        id: 1, store_id: 1, table_number: "1", capacity: 4, is_active: true, password_hash: hash,
       });
 
-      const result = await service.loginTable("store-001", 1, "table123");
+      const result = await service.loginTable(1, "1", "table123");
       expect(result.token).toBeDefined();
-      expect(result.storeId).toBe("store-001");
-      expect(result.tableId).toBe("table-001");
-      expect(result.tableNumber).toBe(1);
+      expect(result.storeId).toBe(1);
+      expect(result.tableId).toBe(1);
+      expect(result.tableNumber).toBe("1");
     });
 
     it("throws NotFoundError when store does not exist", async () => {
       mockStoreRepo.validate.mockResolvedValue(false);
-      await expect(service.loginTable("store-001", 1, "pass")).rejects.toThrow("매장을 찾을 수 없습니다");
+      await expect(service.loginTable(1, "1", "pass")).rejects.toThrow("매장을 찾을 수 없습니다");
     });
 
     it("throws TooManyAttemptsError when login attempts exceeded", async () => {
       mockStoreRepo.validate.mockResolvedValue(true);
       mockLoginAttemptRepo.countRecentFailures.mockResolvedValue(5);
-      await expect(service.loginTable("store-001", 1, "pass")).rejects.toThrow("로그인 시도 횟수를 초과했습니다");
+      await expect(service.loginTable(1, "1", "pass")).rejects.toThrow("로그인 시도 횟수를 초과했습니다");
     });
 
     it("throws UnauthorizedError when table not found", async () => {
       mockStoreRepo.validate.mockResolvedValue(true);
       mockLoginAttemptRepo.countRecentFailures.mockResolvedValue(0);
       mockTableRepo.findByStoreAndNumber.mockResolvedValue(null);
-      await expect(service.loginTable("store-001", 99, "pass")).rejects.toThrow("매장 ID, 테이블 번호 또는 비밀번호가 올바르지 않습니다");
+      await expect(service.loginTable(1, "99", "pass")).rejects.toThrow("매장 ID, 테이블 번호 또는 비밀번호가 올바르지 않습니다");
     });
 
     it("throws UnauthorizedError on wrong password and records failure", async () => {
@@ -111,11 +111,11 @@ describe("AuthService", () => {
       const { hashPassword } = await import("../../src/utils/password.js");
       const hash = await hashPassword("correct");
       mockTableRepo.findByStoreAndNumber.mockResolvedValue({
-        id: "table-001", store_id: "store-001", table_number: 1, capacity: 4, is_active: true, password_hash: hash,
+        id: 1, store_id: 1, table_number: "1", capacity: 4, is_active: true, password_hash: hash,
       });
 
-      await expect(service.loginTable("store-001", 1, "wrong")).rejects.toThrow("매장 ID, 테이블 번호 또는 비밀번호가 올바르지 않습니다");
-      expect(mockLoginAttemptRepo.record).toHaveBeenCalledWith("store:store-001:table:1", false);
+      await expect(service.loginTable(1, "1", "wrong")).rejects.toThrow("매장 ID, 테이블 번호 또는 비밀번호가 올바르지 않습니다");
+      expect(mockLoginAttemptRepo.record).toHaveBeenCalledWith("store:1:table:1", false);
     });
   });
 });
