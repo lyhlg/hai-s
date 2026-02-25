@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-@theme {
+@source "../../../packages/dd/src/**/*.{ts,tsx}";
+
+@theme inline {
   --color-white: #FFFFFF;
   --color-black: #0C0C0C;
 
