@@ -23,7 +23,14 @@ tableRouter.post("/:storeId/tables", auth, authorize("admin"), validate(createTa
     const storeId = req.params.storeId as string;
     const { tableNumber, password } = req.body;
     const table = await tableService.createTable(storeId, tableNumber, password);
-    res.status(201).json({ id: table.id, storeId: table.storeId, tableNumber: table.tableNumber, createdAt: table.createdAt });
+    res.status(201).json({ 
+      id: table.id, 
+      store_id: table.store_id, 
+      table_number: table.table_number, 
+      capacity: table.capacity,
+      is_active: table.is_active,
+      created_at: table.created_at 
+    });
   } catch (err) {
     next(err);
   }
@@ -33,7 +40,14 @@ tableRouter.get("/:storeId/tables", auth, authorize("admin"), async (req, res, n
   try {
     const storeId = req.params.storeId as string;
     const tables = await tableService.getTables(storeId);
-    res.json(tables.map((t) => ({ id: t.id, storeId: t.storeId, tableNumber: t.tableNumber, createdAt: t.createdAt })));
+    res.json(tables.map((t) => ({ 
+      id: t.id, 
+      store_id: t.store_id, 
+      table_number: t.table_number, 
+      capacity: t.capacity,
+      is_active: t.is_active,
+      created_at: t.created_at 
+    })));
   } catch (err) {
     next(err);
   }
@@ -43,7 +57,14 @@ tableRouter.get("/:storeId/tables/:tableId", auth, authorize("admin", "table"), 
   try {
     const { storeId, tableId } = req.params as Record<string, string>;
     const table = await tableService.getTable(storeId, tableId);
-    res.json({ id: table.id, storeId: table.storeId, tableNumber: table.tableNumber, createdAt: table.createdAt });
+    res.json({ 
+      id: table.id, 
+      store_id: table.store_id, 
+      table_number: table.table_number, 
+      capacity: table.capacity,
+      is_active: table.is_active,
+      created_at: table.created_at 
+    });
   } catch (err) {
     next(err);
   }

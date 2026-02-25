@@ -1,28 +1,36 @@
 import type { Pool } from "mysql2/promise";
-import type { Table } from "@hai-s/shared";
+import type { Table, TableWithPassword } from "@hai-s/shared";
 import { v4 as uuid } from "uuid";
 
 export class TableRepository {
   constructor(private pool: Pool) {}
 
-  async create(storeId: string, tableNumber: number, passwordHash: string): Promise<Table> {
+  async create(storeId: string, tableNumber: number, passwordHash: string): Promise<TableWithPassword> {
     const id = uuid();
     const now = new Date();
     await this.pool.execute(
-      "INSERT INTO tables_ (id, store_id, table_number, password_hash) VALUES (?, ?, ?, ?)",
-      [id, storeId, tableNumber, passwordHash],
+      "INSERT INTO tables_ (id, store_id, table_number, capacity, password_hash) VALUES (?, ?, ?, ?, ?)",
+      [id, storeId, tableNumber, 4, passwordHash],
     );
-    return { id, storeId, tableNumber, passwordHash, createdAt: now };
+    return { 
+      id: parseInt(id), 
+      store_id: parseInt(storeId), 
+      table_number: tableNumber.toString(), 
+      capacity: 4,
+      is_active: true,
+      password_hash: passwordHash,
+      created_at: now 
+    };
   }
 
-  async findByStoreAndNumber(storeId: string, tableNumber: number): Promise<Table | null> {
+  async findByStoreAndNumber(storeId: string, tableNumber: number): Promise<TableWithPassword | null> {
     const [rows] = await this.pool.execute(
       "SELECT * FROM tables_ WHERE store_id = ? AND table_number = ?",
       [storeId, tableNumber],
     );
     const arr = rows as any[];
     if (arr.length === 0) return null;
-    return this.toTable(arr[0]);
+    return this.toTableWithPassword(arr[0]);
   }
 
   async getById(id: string): Promise<Table | null> {
@@ -41,6 +49,25 @@ export class TableRepository {
   }
 
   private toTable(r: any): Table {
-    return { id: r.id, storeId: r.store_id, tableNumber: r.table_number, passwordHash: r.password_hash, createdAt: r.created_at };
+    return { 
+      id: r.id, 
+      store_id: r.store_id, 
+      table_number: r.table_number.toString(), 
+      capacity: r.capacity || 4,
+      is_active: r.is_active !== false,
+      created_at: r.created_at 
+    };
+  }
+
+  private toTableWithPassword(r: any): TableWithPassword {
+    return { 
+      id: r.id, 
+      store_id: r.store_id, 
+      table_number: r.table_number.toString(), 
+      capacity: r.capacity || 4,
+      is_active: r.is_active !== false,
+      password_hash: r.password_hash,
+      created_at: r.created_at 
+    };
   }
 }

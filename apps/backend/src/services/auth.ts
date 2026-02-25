@@ -24,7 +24,7 @@ export class AuthService {
     await this.checkLoginAllowed(identifier);
 
     const user = await this.adminUserRepo.findByStoreAndUsername(storeId, username);
-    if (!user || !(await comparePassword(password, user.passwordHash))) {
+    if (!user || !(await comparePassword(password, user.password_hash!))) {
       await this.loginAttemptRepo.record(identifier, false);
       throw new UnauthorizedError("매장 ID, 사용자명 또는 비밀번호가 올바르지 않습니다");
     }
@@ -46,7 +46,7 @@ export class AuthService {
     await this.checkLoginAllowed(identifier);
 
     const table = await this.tableRepo.findByStoreAndNumber(storeId, tableNumber);
-    if (!table || !(await comparePassword(password, table.passwordHash))) {
+    if (!table || !(await comparePassword(password, table.password_hash!))) {
       await this.loginAttemptRepo.record(identifier, false);
       throw new UnauthorizedError("매장 ID, 테이블 번호 또는 비밀번호가 올바르지 않습니다");
     }

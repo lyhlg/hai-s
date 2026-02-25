@@ -31,7 +31,7 @@ export class TableService {
 
   async getTable(storeId: string, tableId: string) {
     const table = await this.tableRepo.getById(tableId);
-    if (!table || table.storeId !== storeId) {
+    if (!table || table.store_id.toString() !== storeId) {
       throw new NotFoundError("테이블을 찾을 수 없습니다");
     }
     return table;
@@ -46,7 +46,7 @@ export class TableService {
   async endSession(storeId: string, tableId: string) {
     const session = await this.sessionRepo.findActive(storeId, tableId);
     if (!session) throw new BadRequestError("활성 세션이 없습니다");
-    return this.sessionRepo.endSession(session.id);
+    return this.sessionRepo.endSession(session.id.toString());
   }
 
   async getActiveSession(storeId: string, tableId: string) {
