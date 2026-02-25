@@ -110,14 +110,14 @@ export function TablesPage() {
                 {tables.map((t) => (
                   <TableRow key={t.id}>
                     <TableCell>{t.id}</TableCell>
-                    <TableCell className="font-medium">{t.table_number}</TableCell>
+                    <TableCell className="font-medium">{t.tableNumber}</TableCell>
                     <TableCell>{t.capacity}명</TableCell>
                     <TableCell>
-                      <Badge variant={t.is_active ? 'default' : 'secondary'}>
-                        {t.is_active ? '활성' : '비활성'}
+                      <Badge variant={t.isActive ? 'default' : 'secondary'}>
+                        {t.isActive ? '활성' : '비활성'}
                       </Badge>
                     </TableCell>
-                    <TableCell>{new Date(t.created_at).toLocaleDateString('ko-KR')}</TableCell>
+                    <TableCell>{new Date(t.createdAt).toLocaleDateString('ko-KR')}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

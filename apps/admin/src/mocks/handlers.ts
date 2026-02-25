@@ -3,8 +3,8 @@ import { http, HttpResponse, delay } from 'msw';
 // mock 데이터
 let tableIdSeq = 3;
 const mockTables = [
-  { id: 1, store_id: 1, table_number: '1', capacity: 4, is_active: true, created_at: '2026-01-01T00:00:00Z' },
-  { id: 2, store_id: 1, table_number: '2', capacity: 2, is_active: true, created_at: '2026-01-01T00:00:00Z' },
+  { id: 1, storeId: 1, tableNumber: '1', capacity: 4, isActive: true, createdAt: '2026-01-01T00:00:00Z' },
+  { id: 2, storeId: 1, tableNumber: '2', capacity: 2, isActive: true, createdAt: '2026-01-01T00:00:00Z' },
 ];
 
 // 간단한 JWT-like token 생성 (mock 전용)
@@ -59,16 +59,16 @@ export const handlers = [
   http.post('/api/stores/:storeId/tables', async ({ request, params }) => {
     await delay(300);
     const body = (await request.json()) as { tableNumber: string; password: string; capacity?: number };
-    if (mockTables.some((t) => t.table_number === body.tableNumber)) {
+    if (mockTables.some((t) => t.tableNumber === body.tableNumber)) {
       return HttpResponse.json({ error: 'CONFLICT', message: '이미 존재하는 테이블 번호입니다' }, { status: 409 });
     }
     const newTable = {
       id: tableIdSeq++,
-      store_id: Number(params.storeId),
-      table_number: body.tableNumber,
+      storeId: Number(params.storeId),
+      tableNumber: body.tableNumber,
       capacity: body.capacity ?? 4,
-      is_active: true,
-      created_at: new Date().toISOString(),
+      isActive: true,
+      createdAt: new Date().toISOString(),
     };
     mockTables.push(newTable);
     return HttpResponse.json(newTable, { status: 201 });
