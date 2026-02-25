@@ -5,22 +5,14 @@ import { v4 as uuid } from "uuid";
 export class TableRepository {
   constructor(private pool: Pool) {}
 
-  async create(storeId: string, tableNumber: number, passwordHash: string): Promise<TableWithPassword> {
+  async create(storeId: string, tableNumber: number, passwordHash: string): Promise<Table> {
     const id = uuid();
     const now = new Date();
     await this.pool.execute(
-      "INSERT INTO tables_ (id, store_id, table_number, capacity, password_hash) VALUES (?, ?, ?, ?, ?)",
-      [id, storeId, tableNumber, 4, passwordHash],
+      "INSERT INTO tables_ (id, store_id, table_number, password_hash) VALUES (?, ?, ?, ?)",
+      [id, storeId, tableNumber, passwordHash],
     );
-    return { 
-      id: parseInt(id), 
-      store_id: parseInt(storeId), 
-      table_number: tableNumber.toString(), 
-      capacity: 4,
-      is_active: true,
-      password_hash: passwordHash,
-      created_at: now 
-    };
+    return { id, store_id: storeId, table_number: tableNumber, created_at: now };
   }
 
   async findByStoreAndNumber(storeId: string, tableNumber: number): Promise<TableWithPassword | null> {
@@ -49,25 +41,10 @@ export class TableRepository {
   }
 
   private toTable(r: any): Table {
-    return { 
-      id: r.id, 
-      store_id: r.store_id, 
-      table_number: r.table_number.toString(), 
-      capacity: r.capacity || 4,
-      is_active: r.is_active !== false,
-      created_at: r.created_at 
-    };
+    return { id: r.id, store_id: r.store_id, table_number: r.table_number, created_at: r.created_at };
   }
 
   private toTableWithPassword(r: any): TableWithPassword {
-    return { 
-      id: r.id, 
-      store_id: r.store_id, 
-      table_number: r.table_number.toString(), 
-      capacity: r.capacity || 4,
-      is_active: r.is_active !== false,
-      password_hash: r.password_hash,
-      created_at: r.created_at 
-    };
+    return { id: r.id, store_id: r.store_id, table_number: r.table_number, password_hash: r.password_hash, created_at: r.created_at };
   }
 }

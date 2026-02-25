@@ -18,10 +18,10 @@ describe("AdminUserRepository", () => {
     const result = await repo.findByStoreAndUsername("store-001", "admin");
     expect(result).toEqual({
       id: "admin-001",
-      storeId: "store-001",
+      store_id: "store-001",
       username: "admin",
-      passwordHash: "hash",
-      createdAt: row.created_at,
+      password_hash: "hash",
+      created_at: row.created_at,
     });
   });
 

@@ -16,7 +16,7 @@ describe("StoreRepository", () => {
     mockPool.execute.mockResolvedValue([[row]]);
 
     const result = await repo.getById("store-001");
-    expect(result).toEqual({ id: "store-001", name: "테스트 매장", createdAt: row.created_at });
+    expect(result).toEqual({ id: "store-001", name: "테스트 매장", created_at: row.created_at });
     expect(mockPool.execute).toHaveBeenCalledWith("SELECT * FROM stores WHERE id = ?", ["store-001"]);
   });
 

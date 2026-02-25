@@ -1,26 +1,17 @@
 // Table types
 export interface Table {
-  id: number;
-  store_id: number;
-  table_number: string;
-  capacity: number;
-  is_active: boolean;
+  id: string;
+  store_id: string;
+  table_number: number;
+  password_hash?: undefined;
   created_at: Date;
 }
 
 // Internal use only - includes password_hash
-export interface TableWithPassword extends Table {
+export interface TableWithPassword {
+  id: string;
+  store_id: string;
+  table_number: number;
   password_hash: string;
-}
-
-export interface CreateTableInput {
-  store_id: number;
-  table_number: string;
-  capacity: number;
-}
-
-export interface UpdateTableInput {
-  table_number?: string;
-  capacity?: number;
-  is_active?: boolean;
+  created_at: Date;
 }

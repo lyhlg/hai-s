@@ -48,13 +48,13 @@ describe("auth middleware", () => {
       expect(next).toHaveBeenCalled();
     });
 
-    it("returns 401 when role does not match", () => {
+    it("returns 403 when role does not match", () => {
       const req = { user: { role: "table" } } as any;
       const res = { status: vi.fn().mockReturnThis(), json: vi.fn() } as any;
       const next = vi.fn();
 
       authorize("admin")(req, res, next);
-      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.status).toHaveBeenCalledWith(403);
       expect(next).not.toHaveBeenCalled();
     });
 

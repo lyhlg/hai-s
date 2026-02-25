@@ -1,10 +1,8 @@
 // Auth types
 export interface AdminUser {
-  id: number;
-  store_id: number;
+  id: string;
+  store_id: string;
   username: string;
-  role: 'owner' | 'manager' | 'staff';
-  is_active: boolean;
   created_at: Date;
 }
 
@@ -13,16 +11,14 @@ export interface AdminUserWithPassword extends AdminUser {
   password_hash: string;
 }
 
-export interface Session {
-  id: number;
-  table_id: number;
-  customer_token: string;
+export interface TableSession {
+  id: string;
+  store_id: string;
+  table_id: string;
   started_at: Date;
-  ended_at: Date | null;
+  completed_at: Date | null;
   is_active: boolean;
 }
-
-export type TableSession = Session; // Alias for backward compatibility
 
 export interface LoginInput {
   username: string;
@@ -31,20 +27,16 @@ export interface LoginInput {
 
 export interface LoginResponse {
   token: string;
-  user: AdminUser;
-}
-
-export interface CustomerSessionResponse {
-  session_id: number;
-  table_number: string;
-  store_name: string;
+  expiresAt: string;
 }
 
 // JWT Claims
 export interface UserClaims {
-  userId: number;
-  storeId: number;
-  role: 'owner' | 'manager' | 'staff';
+  userId?: string;
+  tableId?: string;
+  storeId: string;
+  tableNumber?: number;
+  role: UserRole;
 }
 
-export type UserRole = 'owner' | 'manager' | 'staff' | 'admin' | 'table';
+export type UserRole = "admin" | "table";

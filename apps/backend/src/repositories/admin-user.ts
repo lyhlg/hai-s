@@ -12,14 +12,6 @@ export class AdminUserRepository {
     const arr = rows as any[];
     if (arr.length === 0) return null;
     const r = arr[0];
-    return { 
-      id: r.id, 
-      store_id: r.store_id, 
-      username: r.username, 
-      password_hash: r.password_hash, 
-      role: r.role,
-      is_active: r.is_active,
-      created_at: r.created_at 
-    };
+    return { id: r.id, store_id: r.store_id, username: r.username, password_hash: r.password_hash, created_at: r.created_at };
   }
 }

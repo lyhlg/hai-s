@@ -20,17 +20,8 @@ const tableService = new TableService(
 
 tableRouter.post("/:storeId/tables", auth, authorize("admin"), validate(createTableSchema), async (req, res, next) => {
   try {
-    const storeId = req.params.storeId as string;
-    const { tableNumber, password } = req.body;
-    const table = await tableService.createTable(storeId, tableNumber, password);
-    res.status(201).json({ 
-      id: table.id, 
-      store_id: table.store_id, 
-      table_number: table.table_number, 
-      capacity: table.capacity,
-      is_active: table.is_active,
-      created_at: table.created_at 
-    });
+    const table = await tableService.createTable(req.params.storeId as string, req.body.tableNumber, req.body.password);
+    res.status(201).json({ id: table.id, storeId: table.store_id, tableNumber: table.table_number, createdAt: table.created_at.toISOString() });
   } catch (err) {
     next(err);
   }
@@ -38,16 +29,8 @@ tableRouter.post("/:storeId/tables", auth, authorize("admin"), validate(createTa
 
 tableRouter.get("/:storeId/tables", auth, authorize("admin"), async (req, res, next) => {
   try {
-    const storeId = req.params.storeId as string;
-    const tables = await tableService.getTables(storeId);
-    res.json(tables.map((t) => ({ 
-      id: t.id, 
-      store_id: t.store_id, 
-      table_number: t.table_number, 
-      capacity: t.capacity,
-      is_active: t.is_active,
-      created_at: t.created_at 
-    })));
+    const tables = await tableService.getTables(req.params.storeId as string);
+    res.json(tables.map((t) => ({ id: t.id, storeId: t.store_id, tableNumber: t.table_number, createdAt: t.created_at })));
   } catch (err) {
     next(err);
   }
@@ -57,14 +40,7 @@ tableRouter.get("/:storeId/tables/:tableId", auth, authorize("admin", "table"), 
   try {
     const { storeId, tableId } = req.params as Record<string, string>;
     const table = await tableService.getTable(storeId, tableId);
-    res.json({ 
-      id: table.id, 
-      store_id: table.store_id, 
-      table_number: table.table_number, 
-      capacity: table.capacity,
-      is_active: table.is_active,
-      created_at: table.created_at 
-    });
+    res.json({ id: table.id, storeId: table.store_id, tableNumber: table.table_number, createdAt: table.created_at });
   } catch (err) {
     next(err);
   }
