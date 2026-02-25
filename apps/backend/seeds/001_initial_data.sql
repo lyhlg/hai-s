@@ -12,26 +12,26 @@ INSERT INTO stores (name) VALUES
 
 -- 2. Admin Users (비밀번호: admin123)
 INSERT INTO admin_users (store_id, username, password_hash) VALUES
-  (1, 'tutto_admin',  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (2, 'menya_admin',  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (3, 'sigol_admin',  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
+  (1, 'tutto_admin',  '$2a$10$CAynLjyBG/neV.O9GGbN5eVp6oJfQN5yWR3euJgMzAGjfb9Gq9DdS'),
+  (2, 'menya_admin',  '$2a$10$CAynLjyBG/neV.O9GGbN5eVp6oJfQN5yWR3euJgMzAGjfb9Gq9DdS'),
+  (3, 'sigol_admin',  '$2a$10$CAynLjyBG/neV.O9GGbN5eVp6oJfQN5yWR3euJgMzAGjfb9Gq9DdS');
 
 -- 3. Tables (비밀번호: table1234)
 INSERT INTO tables_ (store_id, table_number, capacity, is_active, password_hash) VALUES
-  (1, 'T1', 4, TRUE, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (1, 'T2', 4, TRUE, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (1, 'T3', 2, TRUE, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (1, 'T4', 6, TRUE, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (1, 'T5', 4, TRUE, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (2, 'T1', 2, TRUE, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (2, 'T2', 2, TRUE, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (2, 'T3', 4, TRUE, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (2, 'T4', 4, TRUE, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (3, 'T1', 4, TRUE, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (3, 'T2', 4, TRUE, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (3, 'T3', 6, TRUE, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (3, 'T4', 4, TRUE, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-  (3, 'T5', 2, TRUE, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
+  (1, 'T1', 4, TRUE, '$2a$10$Vga/6n91u4dyggUUdL8.EOSKxPv6LT5t52tLVuQU2NUe50KwjENHm'),
+  (1, 'T2', 4, TRUE, '$2a$10$Vga/6n91u4dyggUUdL8.EOSKxPv6LT5t52tLVuQU2NUe50KwjENHm'),
+  (1, 'T3', 2, TRUE, '$2a$10$Vga/6n91u4dyggUUdL8.EOSKxPv6LT5t52tLVuQU2NUe50KwjENHm'),
+  (1, 'T4', 6, TRUE, '$2a$10$Vga/6n91u4dyggUUdL8.EOSKxPv6LT5t52tLVuQU2NUe50KwjENHm'),
+  (1, 'T5', 4, TRUE, '$2a$10$Vga/6n91u4dyggUUdL8.EOSKxPv6LT5t52tLVuQU2NUe50KwjENHm'),
+  (2, 'T1', 2, TRUE, '$2a$10$Vga/6n91u4dyggUUdL8.EOSKxPv6LT5t52tLVuQU2NUe50KwjENHm'),
+  (2, 'T2', 2, TRUE, '$2a$10$Vga/6n91u4dyggUUdL8.EOSKxPv6LT5t52tLVuQU2NUe50KwjENHm'),
+  (2, 'T3', 4, TRUE, '$2a$10$Vga/6n91u4dyggUUdL8.EOSKxPv6LT5t52tLVuQU2NUe50KwjENHm'),
+  (2, 'T4', 4, TRUE, '$2a$10$Vga/6n91u4dyggUUdL8.EOSKxPv6LT5t52tLVuQU2NUe50KwjENHm'),
+  (3, 'T1', 4, TRUE, '$2a$10$Vga/6n91u4dyggUUdL8.EOSKxPv6LT5t52tLVuQU2NUe50KwjENHm'),
+  (3, 'T2', 4, TRUE, '$2a$10$Vga/6n91u4dyggUUdL8.EOSKxPv6LT5t52tLVuQU2NUe50KwjENHm'),
+  (3, 'T3', 6, TRUE, '$2a$10$Vga/6n91u4dyggUUdL8.EOSKxPv6LT5t52tLVuQU2NUe50KwjENHm'),
+  (3, 'T4', 4, TRUE, '$2a$10$Vga/6n91u4dyggUUdL8.EOSKxPv6LT5t52tLVuQU2NUe50KwjENHm'),
+  (3, 'T5', 2, TRUE, '$2a$10$Vga/6n91u4dyggUUdL8.EOSKxPv6LT5t52tLVuQU2NUe50KwjENHm');
 
 -- 4. Table Sessions
 INSERT INTO table_sessions (store_id, table_id, started_at, is_active) VALUES
