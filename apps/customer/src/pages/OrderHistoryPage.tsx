@@ -5,12 +5,13 @@ import { useSSE } from "../hooks/useSSE";
 const STATUS_LABEL: Record<string, string> = { pending: "대기중", confirmed: "접수", preparing: "준비중", ready: "완료", served: "서빙완료", cancelled: "취소" };
 const STATUS_COLOR: Record<string, string> = { pending: "#ff9800", confirmed: "#2196f3", preparing: "#2196f3", ready: "#4caf50", served: "#9e9e9e", cancelled: "#f44336" };
 
-export default function OrderHistoryPage({ sessionId }: { sessionId: string | null }) {
+export default function OrderHistoryPage({ sessionId }: { sessionId: number | null }) {
   const [orders, setOrders] = useState<any[]>([]);
+  const storeId = Number(localStorage.getItem("storeId")) || 0;
 
   useEffect(() => {
-    if (sessionId) api.getOrders(sessionId).then(setOrders).catch(() => {});
-  }, [sessionId]);
+    if (sessionId && storeId) api.getOrders(storeId, sessionId).then(setOrders).catch(() => {});
+  }, [sessionId, storeId]);
 
   const handleSSE = useCallback((event: any) => {
     if (event.type === "order:updated" || event.type === "order:cancelled") {
