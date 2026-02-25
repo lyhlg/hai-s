@@ -14,6 +14,8 @@ export interface Table {
   id: string;
   store_id: string;
   table_number: number;
+  capacity: number;
+  is_active: boolean;
   created_at: Date;
 }
 

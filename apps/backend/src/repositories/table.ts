@@ -5,14 +5,14 @@ import { v4 as uuid } from "uuid";
 export class TableRepository {
   constructor(private pool: Pool) {}
 
-  async create(storeId: string, tableNumber: number, passwordHash: string): Promise<Table> {
+  async create(storeId: string, tableNumber: number, passwordHash: string, capacity = 4): Promise<Table> {
     const id = uuid();
     const now = new Date();
     await this.pool.execute(
-      "INSERT INTO tables_ (id, store_id, table_number, password_hash) VALUES (?, ?, ?, ?)",
-      [id, storeId, tableNumber, passwordHash],
+      "INSERT INTO tables_ (id, store_id, table_number, capacity, password_hash) VALUES (?, ?, ?, ?, ?)",
+      [id, storeId, tableNumber, capacity, passwordHash],
     );
-    return { id, store_id: storeId, table_number: tableNumber, created_at: now };
+    return { id, store_id: storeId, table_number: tableNumber, capacity, is_active: true, created_at: now };
   }
 
   async findByStoreAndNumber(storeId: string, tableNumber: number): Promise<TableWithPassword | null> {
@@ -41,10 +41,10 @@ export class TableRepository {
   }
 
   private toTable(r: any): Table {
-    return { id: r.id, store_id: r.store_id, table_number: r.table_number, created_at: r.created_at };
+    return { id: r.id, store_id: r.store_id, table_number: r.table_number, capacity: r.capacity, is_active: !!r.is_active, created_at: r.created_at };
   }
 
   private toTableWithPassword(r: any): TableWithPassword {
-    return { id: r.id, store_id: r.store_id, table_number: r.table_number, password_hash: r.password_hash, created_at: r.created_at };
+    return { id: r.id, store_id: r.store_id, table_number: r.table_number, capacity: r.capacity, is_active: !!r.is_active, password_hash: r.password_hash, created_at: r.created_at };
   }
 }

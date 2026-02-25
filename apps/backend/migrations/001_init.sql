@@ -18,6 +18,8 @@ CREATE TABLE tables_ (
   id            VARCHAR(36) PRIMARY KEY,
   store_id      VARCHAR(36) NOT NULL,
   table_number  INT NOT NULL,
+  capacity      INT NOT NULL DEFAULT 4,
+  is_active     BOOLEAN NOT NULL DEFAULT TRUE,
   password_hash VARCHAR(255) NOT NULL,
   created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (store_id) REFERENCES stores(id),

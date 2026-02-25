@@ -77,7 +77,7 @@ describe("AuthService", () => {
       const { hashPassword } = await import("../../src/utils/password.js");
       const hash = await hashPassword("table123");
       mockTableRepo.findByStoreAndNumber.mockResolvedValue({
-        id: "table-001", store_id: "store-001", table_number: 1, password_hash: hash,
+        id: "table-001", store_id: "store-001", table_number: 1, capacity: 4, is_active: true, password_hash: hash,
       });
 
       const result = await service.loginTable("store-001", 1, "table123");
@@ -111,7 +111,7 @@ describe("AuthService", () => {
       const { hashPassword } = await import("../../src/utils/password.js");
       const hash = await hashPassword("correct");
       mockTableRepo.findByStoreAndNumber.mockResolvedValue({
-        id: "table-001", store_id: "store-001", table_number: 1, password_hash: hash,
+        id: "table-001", store_id: "store-001", table_number: 1, capacity: 4, is_active: true, password_hash: hash,
       });
 
       await expect(service.loginTable("store-001", 1, "wrong")).rejects.toThrow("매장 ID, 테이블 번호 또는 비밀번호가 올바르지 않습니다");

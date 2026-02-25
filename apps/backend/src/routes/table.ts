@@ -8,6 +8,7 @@ import { TableService } from "../services/table.js";
 import { StoreRepository } from "../repositories/store.js";
 import { TableRepository } from "../repositories/table.js";
 import { SessionRepository } from "../repositories/session.js";
+import type { Table } from "@hai-s/shared";
 
 export const tableRouter = Router();
 
@@ -18,10 +19,14 @@ const tableService = new TableService(
   new SessionRepository(pool),
 );
 
+function toResponse(t: Table) {
+  return { id: t.id, storeId: t.store_id, tableNumber: t.table_number, capacity: t.capacity, isActive: t.is_active, createdAt: t.created_at };
+}
+
 tableRouter.post("/:storeId/tables", auth, authorize("admin"), validate(createTableSchema), async (req, res, next) => {
   try {
-    const table = await tableService.createTable(req.params.storeId as string, req.body.tableNumber, req.body.password);
-    res.status(201).json({ id: table.id, storeId: table.store_id, tableNumber: table.table_number, createdAt: table.created_at.toISOString() });
+    const table = await tableService.createTable(req.params.storeId as string, req.body.tableNumber, req.body.password, req.body.capacity);
+    res.status(201).json(toResponse(table));
   } catch (err) {
     next(err);
   }
@@ -30,7 +35,7 @@ tableRouter.post("/:storeId/tables", auth, authorize("admin"), validate(createTa
 tableRouter.get("/:storeId/tables", auth, authorize("admin"), async (req, res, next) => {
   try {
     const tables = await tableService.getTables(req.params.storeId as string);
-    res.json(tables.map((t) => ({ id: t.id, storeId: t.store_id, tableNumber: t.table_number, createdAt: t.created_at })));
+    res.json(tables.map(toResponse));
   } catch (err) {
     next(err);
   }
@@ -40,7 +45,7 @@ tableRouter.get("/:storeId/tables/:tableId", auth, authorize("admin", "table"), 
   try {
     const { storeId, tableId } = req.params as Record<string, string>;
     const table = await tableService.getTable(storeId, tableId);
-    res.json({ id: table.id, storeId: table.store_id, tableNumber: table.table_number, createdAt: table.created_at });
+    res.json(toResponse(table));
   } catch (err) {
     next(err);
   }

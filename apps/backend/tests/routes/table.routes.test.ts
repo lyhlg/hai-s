@@ -34,7 +34,7 @@ describe("Table Routes", () => {
   describe("POST /api/stores/:storeId/tables", () => {
     it("returns 201 on successful creation (admin)", async () => {
       const now = new Date();
-      mockCreateTable.mockResolvedValue({ id: "t1", store_id: "store-001", table_number: 1, created_at: now });
+      mockCreateTable.mockResolvedValue({ id: "t1", store_id: "store-001", table_number: 1, capacity: 4, is_active: true, created_at: now });
 
       const res = await supertest(app)
         .post("/api/stores/store-001/tables")
@@ -44,6 +44,8 @@ describe("Table Routes", () => {
       expect(res.status).toBe(201);
       expect(res.body.id).toBe("t1");
       expect(res.body.tableNumber).toBe(1);
+      expect(res.body.capacity).toBe(4);
+      expect(res.body.isActive).toBe(true);
     });
 
     it("returns 401 without token", async () => {
@@ -90,8 +92,8 @@ describe("Table Routes", () => {
     it("returns table list (admin)", async () => {
       const now = new Date();
       mockGetTables.mockResolvedValue([
-        { id: "t1", store_id: "s1", table_number: 1, created_at: now },
-        { id: "t2", store_id: "s1", table_number: 2, created_at: now },
+        { id: "t1", store_id: "s1", table_number: 1, capacity: 4, is_active: true, created_at: now },
+        { id: "t2", store_id: "s1", table_number: 2, capacity: 6, is_active: true, created_at: now },
       ]);
 
       const res = await supertest(app)
@@ -114,7 +116,7 @@ describe("Table Routes", () => {
   describe("GET /api/stores/:storeId/tables/:tableId", () => {
     it("returns table detail (admin or table)", async () => {
       const now = new Date();
-      mockGetTable.mockResolvedValue({ id: "t1", store_id: "s1", table_number: 1, created_at: now });
+      mockGetTable.mockResolvedValue({ id: "t1", store_id: "s1", table_number: 1, capacity: 4, is_active: true, created_at: now });
 
       const res = await supertest(app)
         .get("/api/stores/store-001/tables/t1")

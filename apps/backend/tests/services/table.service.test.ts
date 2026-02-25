@@ -17,7 +17,7 @@ describe("TableService", () => {
     it("creates table successfully", async () => {
       mockStoreRepo.validate.mockResolvedValue(true);
       mockTableRepo.findByStoreAndNumber.mockResolvedValue(null);
-      mockTableRepo.create.mockResolvedValue({ id: "t1", storeId: "s1", tableNumber: 1, createdAt: new Date() });
+      mockTableRepo.create.mockResolvedValue({ id: "t1", store_id: "s1", table_number: 1, capacity: 4, is_active: true, created_at: new Date() });
 
       const result = await service.createTable("s1", 1, "pass");
       expect(result.id).toBe("t1");

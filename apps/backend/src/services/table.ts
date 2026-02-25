@@ -11,7 +11,7 @@ export class TableService {
     private sessionRepo: SessionRepository,
   ) {}
 
-  async createTable(storeId: string, tableNumber: number, password: string) {
+  async createTable(storeId: string, tableNumber: number, password: string, capacity?: number) {
     if (!(await this.storeRepo.validate(storeId))) {
       throw new NotFoundError("매장을 찾을 수 없습니다");
     }
@@ -19,7 +19,7 @@ export class TableService {
       throw new ConflictError("이미 존재하는 테이블 번호입니다");
     }
     const passwordHash = await hashPassword(password);
-    return this.tableRepo.create(storeId, tableNumber, passwordHash);
+    return this.tableRepo.create(storeId, tableNumber, passwordHash, capacity);
   }
 
   async getTables(storeId: string) {
