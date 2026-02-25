@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Spinner } from '@/components/ui/spinner';
 
@@ -29,7 +30,7 @@ export function TablesPage() {
     setCreating(true);
     setCreateError('');
     try {
-      await create({ tableNumber: num, password });
+      await create({ tableNumber: String(num), password });
       setTableNumber('');
       setPassword('');
       setOpen(false);
@@ -103,6 +104,8 @@ export function TablesPage() {
                 <TableRow>
                   <TableHead>ID</TableHead>
                   <TableHead>테이블 번호</TableHead>
+                  <TableHead>수용 인원</TableHead>
+                  <TableHead>상태</TableHead>
                   <TableHead>생성일</TableHead>
                 </TableRow>
               </TableHeader>
@@ -111,6 +114,12 @@ export function TablesPage() {
                   <TableRow key={t.id}>
                     <TableCell>{t.id}</TableCell>
                     <TableCell className="font-medium">{t.table_number}</TableCell>
+                    <TableCell>{t.capacity}명</TableCell>
+                    <TableCell>
+                      <Badge variant={t.is_active ? 'default' : 'secondary'}>
+                        {t.is_active ? '활성' : '비활성'}
+                      </Badge>
+                    </TableCell>
                     <TableCell>{new Date(t.created_at).toLocaleDateString('ko-KR')}</TableCell>
                   </TableRow>
                 ))}

@@ -2,8 +2,9 @@ import { api } from './client';
 import type { Table } from '@hai-s/shared';
 
 export interface CreateTableRequest {
-  tableNumber: number;
+  tableNumber: string;
   password: string;
+  capacity?: number;
 }
 
 // BE 응답 형태 (password_hash 제외)
